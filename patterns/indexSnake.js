@@ -1,6 +1,7 @@
-import { rgb2yuv, yuv2rgb, lerpYUV } from "../engine/color.js";
+import { lerpRGBasYUV } from "../engine/color.js";
+import { quantize } from "../engine/math.js";
 
-export default = {
+export default {
     config: {
         period: 1,
         trail: 5,
@@ -8,12 +9,12 @@ export default = {
         primaryColor: {
             r: 255,
             g: 255,
-            b: 255,
+            b: 0,
         },
         secondaryColor: {
-            r: 255,
-            g: 255,
-            b: 255,
+            r: 0,
+            g: 200,
+            b: 200,
         },
     },
     global: (d, c) => {
@@ -22,7 +23,15 @@ export default = {
         };
     },
     pixel: (p, c, g) => {
-        
-        g.index p.index
+        let dist = g.index - p.index;
+        const pos = 1;
+        if (dist < 0) {
+            const distFromEnd = p.length - p.index - 1;
+            dist = g.index + distFromEnd;
+        }
+        if (dist > 0 && dist <= c.trail)
+            pos = dist / c.trail;
+
+        return lerpRGBasYUV(c.primaryColor, c.secondaryColor, pos);
     }
 };

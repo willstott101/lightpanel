@@ -1,9 +1,12 @@
-class Executor {
+import { horizontalZigZagPixelMap } from "./layout.js";
+import indexSnake from "../patterns/indexSnake.js";
+
+export class Executor {
     pixelMap = [];
     data = new Uint8Array();
     constructor() {
-        this._patch = snake;
-        this._config = snake.config;
+        this._patch = indexSnake;
+        this._config = indexSnake.config;
     }
 
     addHorizontalZigZag(count, startPos, xDist, yDist, xCount) {
@@ -22,17 +25,17 @@ class Executor {
         };
         let g;
         if (this._patch.global)
-            g = this._patch.global();
+            g = this._patch.global(p, this._config);
         for (let i = 0; i < p.length; i++) {
             const pixelData = this.pixelMap[i];
-            this._patch.pixel(Object.assign(p, {
+            const color = this._patch.pixel(Object.assign(p, {
                 pos: pixelData,
                 index: i,
             }), this._config, g);
             const j = i * 3;
-            data[j + 0] = color.r;
-            data[j + 1] = color.g;
-            data[j + 2] = color.b;
+            this.data[j + 0] = color.r;
+            this.data[j + 1] = color.g;
+            this.data[j + 2] = color.b;
         }
     }
 }

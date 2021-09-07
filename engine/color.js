@@ -53,3 +53,11 @@ export function lerpCMYK(ac, bc, t) {
         k: lerp(ac.k, bc.k, t),
     };
 }
+
+export function lerpRGBasYUV(ac, bc, t) {
+    return yuv2rgb(lerpYUV(rgb2yuv(ac), rgb2yuv(bc), t));
+}
+
+export function lerpRGBasCMYK(ac, bc, t) {
+    return cmyk2rgb(lerpCMYK(rgb2cmyk(ac), rgb2cmyk(bc), t));
+}

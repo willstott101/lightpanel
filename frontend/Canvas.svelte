@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { canvasReady } from './engine';
+    import { renderer } from './globals';
     export let id;
     let canvas;
     onMount(() => {
-        canvasReady(canvas);
+        renderer.getView(id).canvasReady(canvas);
     });
 </script>
 
