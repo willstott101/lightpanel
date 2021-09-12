@@ -8,6 +8,8 @@ export default {
   routes: [],
   optimize: {},
   packageOptions: {},
-  devOptions: {},
+  devOptions: {
+    // hmr: false
+  },
   buildOptions: {},
 };

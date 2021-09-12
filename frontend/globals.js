@@ -15,13 +15,15 @@ export const renderer = new Renderer(executor);
 renderer.addView("a", new CanvasPixelView(
     executor,
     {x: 0, y: 0}, // Start pos
-    {x: 0, y: 0}, // Distance between LEDs
+    {x: 1, y: 1}, // Distance between pixels
 ));
 renderer.addView("b", new CanvasPixelView(
     executor,
     {x: 10, y: 0}, // Start pos
-    {x: 0, y: 0}, // Distance between LEDs
+    {x: 1, y: 1}, // Distance between pixels
 ));
 
+// debugger;
 
 renderer.start();
+

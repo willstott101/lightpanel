@@ -12,11 +12,14 @@ export class Executor {
     addHorizontalZigZag(count, startPos, xDist, yDist, xCount) {
         horizontalZigZagPixelMap(
             this.pixelMap, this.pixelMap.length, count, startPos, xDist, yDist, xCount);
+        const oldData = this.data;
+        this.data = new Uint8Array(this.pixelMap.length * 3);
+        this.data.set(oldData, 0);
     }
 
     execute(time) {
         if (time === undefined) {
-            time = (new Date()).getTime();
+            time = (new Date()).getTime() / 1000;
         }
         const p = {
             time: time,

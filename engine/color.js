@@ -5,28 +5,28 @@ export function rgb2yuv(c) {
     return new simpleColorConverter({
         rgb: c,
         to: 'yuv'
-    });
+    }).color;
 }
 
 export function yuv2rgb(c) {
     return new simpleColorConverter({
         yuv: c,
         to: 'rgb'
-    });
+    }).color;
 }
 
 export function rgb2cmyk(c) {
     return new simpleColorConverter({
         rgb: c,
         to: 'cmyk'
-    });
+    }).color;
 }
 
 export function cmyk2rgb(c) {
     return new simpleColorConverter({
         cmyk: c,
         to: 'rgb'
-    });
+    }).color;
 }
 
 export function lerpYUV(ac, bc, t) {
