@@ -57,35 +57,3 @@ export class CanvasPixelView {
         this.ctx.putImageData(this.data, 0, 0);
     }
 }
-
-export class Renderer {
-    constructor(executor) {
-        this.executor = executor;
-        this.views = new Map();
-    }
-
-    addView(name, view) {
-        this.views.set(name, view);
-    }
-
-    getView(name) {
-        return this.views.get(name);
-    }
-
-    start() {
-        const onFrame = () => {
-            // debugger;
-            this.executor.execute();
-            // console.log("onFrame", this.executor.data);
-            for (const v of this.views.values()) {
-                v.render();
-            }
-            this._animReq = requestAnimationFrame(onFrame);
-        };
-        this._animReq = requestAnimationFrame(onFrame);
-    }
-
-    stop() {
-        cancelAnimationFrame(this._animReq);
-    }
-}

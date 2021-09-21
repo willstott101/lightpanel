@@ -13,5 +13,5 @@
 
 <div class="root">
     <Canvas id="a"></Canvas>
-    <Canvas id="b"></Canvas>
+    <!-- <Canvas id="b"></Canvas> -->
 </div>

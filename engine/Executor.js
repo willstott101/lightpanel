@@ -5,8 +5,17 @@ export class Executor {
     pixelMap = [];
     data = new Uint8Array();
     constructor() {
+        this.views = new Map();
         this._patch = indexSnake;
         this._config = indexSnake.config;
+    }
+
+    addView(name, view) {
+        this.views.set(name, view);
+    }
+
+    getView(name) {
+        return this.views.get(name);
     }
 
     addHorizontalZigZag(count, startPos, xDist, yDist, xCount) {
@@ -39,6 +48,30 @@ export class Executor {
             this.data[j + 0] = color.r;
             this.data[j + 1] = color.g;
             this.data[j + 2] = color.b;
+        }
+    }
+
+    start() {
+        const doFrame = () => {
+            this.execute();
+            for (const v of this.views.values()) v.render();
+        };
+        if (typeof window === 'undefined') {
+            this._animReq = setInterval(doFrame, 16);
+        } else {
+            const onFrame = () => {
+                doFrame();
+                this._animReq = requestAnimationFrame(onFrame);
+            };
+            this._animReq = requestAnimationFrame(onFrame);
+        }
+    }
+
+    stop() {
+        if (typeof window === 'undefined') {
+            clearInterval(this._animReq);
+        } else {
+            cancelAnimationFrame(this._animReq);
         }
     }
 }
