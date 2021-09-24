@@ -4,10 +4,11 @@ import indexSnake from "../patterns/indexSnake.js";
 export class Executor {
     pixelMap = [];
     data = new Uint8Array();
-    constructor() {
+    constructor(targetFps = 60) {
         this.views = new Map();
         this._patch = indexSnake;
         this._config = indexSnake.config;
+        this._interval_ms = (1 / targetFps) * 1000;
     }
 
     addView(name, view) {
@@ -57,7 +58,7 @@ export class Executor {
             for (const v of this.views.values()) v.render();
         };
         if (typeof window === 'undefined') {
-            this._animReq = setInterval(doFrame, 16);
+            this._animReq = setInterval(doFrame, this._interval_ms);
         } else {
             const onFrame = () => {
                 doFrame();

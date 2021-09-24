@@ -1,7 +1,5 @@
-import encode from '@wasm-codecs/oxipng';
-import { PNG } from 'pngjs';
 import SerialPort from 'serialport';
-import { encode as encodeLibpng } from "node-libpng";
+import { encode } from 'node-libpng';
 import { Buffer } from 'buffer';
 
 const SEP = "SEPERATING TEXT";
@@ -20,12 +18,11 @@ export class SerialView {
         });
     }
     render() {
-        // console.log("Compressing");
-        // let timeMs = (new Date()).getTime();
+        let timeMs = (new Date()).getTime();
         const height = this.executor.data.length / (this.width * 3);
         
         const buf = Buffer.from(this.executor.data.buffer);
-        const basic = encodeLibpng(buf, {
+        const basic = encode(buf, {
             width: this.width,
             height: height,
             compressionLevel: 9,
@@ -35,8 +32,8 @@ export class SerialView {
             this.port.write(basic);
             this.port.write(SEP);
         }
-        // let timeMsEnd = (new Date()).getTime();
-        // console.log("    done in", timeMsEnd - timeMs);
+        let timeMsEnd = (new Date()).getTime();
+        console.log("frame of size", basic.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
     }
 }
 

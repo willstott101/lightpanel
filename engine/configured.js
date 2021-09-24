@@ -1,6 +1,6 @@
 import { Executor } from "../engine/Executor.js";
 
-export const executor = new Executor();
+export const executor = new Executor(60);
 executor.addHorizontalZigZag(
     1200, // Num LEDs
     {x: 0, y: 0}, // Start pos
