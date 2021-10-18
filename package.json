@@ -19,11 +19,8 @@
   },
   "homepage": "https://github.com/willstott101/lightpanel#readme",
   "dependencies": {
-    "@jimp/png": "^0.16.1",
-    "@wasm-codecs/oxipng": "^1.0.1",
     "autobahn": "^20.9.2",
     "node-libpng": "^0.2.20",
-    "pngjs": "^6.0.0",
     "serialport": "^9.2.0",
     "simple-color-converter": "^2.1.13"
   },
