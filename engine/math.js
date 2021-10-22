@@ -16,14 +16,13 @@ export function sinWave(t, period = 1, min = 0, max = 255, offset = 0) {
 }
 
 export function quantize(t, period = 1, max = 0, offset = 0) {
-    t = ((t / period) * max) % max;
-    return Math.floor(t + offset);
+    t = (((t / period) * max) + offset) % max;
+    return Math.floor(t);
 }
 
 export function lerp(a, b, t) {
     return a + ((b - a) * t);
 }
-
 
 export function vector2DistSq(vec1, vec2) {
     const xd = vec1.x - vec2.x;
