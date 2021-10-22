@@ -1,13 +1,13 @@
 import { horizontalZigZagPixelMap } from "./layout.js";
-import indexSnake from "../patterns/indexSnake.js";
+import defaultPattern from "../patterns/indexSnake.js";
 
 export class Executor {
     pixelMap = [];
     data = new Uint8Array();
     constructor(targetFps = 60) {
         this.views = new Map();
-        this._patch = indexSnake;
-        this._config = indexSnake.config;
+        this._patch = defaultPattern;
+        this._config = defaultPattern.config;
         this._interval_ms = (1 / targetFps) * 1000;
     }
 
