@@ -3,9 +3,9 @@ import { quantize } from "../engine/math.js";
 
 export default {
     config: {
-        period: 50,
-        trail: 10,
-        count: 5,
+        period: 500,
+        trail: 6,
+        count: 90,
         primaryColor: {
             r: 255,
             g: 120,
