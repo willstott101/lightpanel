@@ -16,9 +16,8 @@ export function sinWave(t, period = 1, min = 0, max = 255, offset = 0) {
 }
 
 export function quantize(t, period = 1, max = 0, offset = 0) {
-    t = ((t + offset) / period);
-    if (max) t %= max;
-    return Math.floor(t);
+    t = ((t / period) * max) % max;
+    return Math.floor(t + offset);
 }
 
 export function lerp(a, b, t) {

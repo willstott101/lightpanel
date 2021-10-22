@@ -18,9 +18,9 @@ export default {
         },
     },
     global: (p, c) => {
-        let index = quantize(p.time * p.length, c.period, p.length);
+        let index = quantize(p.time, c.period, p.length);
         return {
-            index, 
+            index,
         };
     },
     pixel: (p, c, g) => {
