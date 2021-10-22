@@ -9,6 +9,8 @@ export class Executor {
         this._patch = defaultPattern;
         this._config = defaultPattern.config;
         this._interval_ms = (1 / targetFps) * 1000;
+        this._startTime = this._now();
+        this._stopTime = undefined;
     }
 
     addView(name, view) {
@@ -52,9 +54,20 @@ export class Executor {
         }
     }
 
+    _now() {
+        const now = (new Date()).getTime() / 1000;
+        return now - (this._startTime || 0);
+    }
+
     start() {
+        if (this._stopTime) {
+            this._startTime += this._now() - this._stopTime;
+            this._stopTime = undefined;
+        } else {
+            this._startTime = this._now();
+        }
         const doFrame = () => {
-            this.execute();
+            this.execute(this._now());
             for (const v of this.views.values()) v.render();
         };
         if (typeof window === 'undefined') {
@@ -69,6 +82,7 @@ export class Executor {
     }
 
     stop() {
+        this._stopTime = this._now();
         if (typeof window === 'undefined') {
             clearInterval(this._animReq);
         } else {
