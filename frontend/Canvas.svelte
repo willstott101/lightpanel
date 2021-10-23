@@ -10,15 +10,14 @@
 
 <style>
     canvas {
-        height: 100px;
+        height: 100%;
         image-rendering: pixelated;
-        /*filter:  blur(4px);*/
     }
 
     div {
-        border: solid #848484 3px;
-        margin:  10px;
-        height: 100px;
+        border: 3px solid transparent;
+        box-sizing: border-box;
+        height: 100%;
     }
 </style>
 
