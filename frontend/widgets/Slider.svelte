@@ -1,10 +1,14 @@
 <script>
-    import {spring} from 'svelte/motion'
+    let m = { x: 0, y: 0 };
 
-    let coords = spring({ x: 0, y: 0}, {
-        stiffness: 1,
-		damping: 0.9
-    });
+    function moveSlider(event) {
+        let offsetY = document.getElementsByClassName('track')[0].offsetTop
+        let bottomLimit = document.getElementsByClassName('track')[0].getBoundingClientRect().bottom
+        let temp = event.clientY - offsetY - (19.2/2);
+        if (event.clientY < bottomLimit && event.clientY > offsetY) {
+            m.y = temp
+        }
+    }
 </script>
 
 <style>
@@ -50,8 +54,8 @@
     }
 </style>
 
-<div class="base" on:click on:mousedown on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}">
-    <div class="knob" style="position:relative; top:{$coords.y}px; left:0;">
+<div id="slider" class="base" on:click on:mousedown>
+    <div class="knob" on:mousemove="{moveSlider}" style="position:relative; top:{m.y}px;">
     </div>
     <div class="track">
     </div>
