@@ -15,6 +15,30 @@
         else
             executor.stop();
     }
+
+    let off = false;
+    let brightness = 1;
+
+    function updateBrightness () {
+        if (off)
+            executor.maxBrightness = 0;
+        else
+            executor.maxBrightness = brightness;
+    }
+
+    function toggleOff () {
+        off = !off;
+        updateBrightness();
+    }
+
+    function brightnessChanged(newBrightness) {
+        brightness = newBrightness;
+        if (brightness <= 0)
+            off = true;
+        else
+            off = false;
+        updateBrightness();
+    }
 </script>
 
 <style>
@@ -49,12 +73,8 @@
             /*grid-row-start: 1;*/
             /*grid-row-end: 1;*/
         ">
-            <Button on:mousedown={togglePause} enabled={running} iconSize="small">
-                {#if running}
-                    <FaPowerOff/>
-                {:else}
-                    <FaPowerOff/>
-                {/if}
+            <Button on:mousedown={toggleOff} enabled={!off} iconSize="small">
+                <FaPowerOff/>
             </Button>
         </div>
         <div style="
@@ -65,9 +85,9 @@
         ">
             <Button on:mousedown={togglePause} enabled={running}>
                 {#if running}
-                    <MdPlay/>
-                {:else}
                     <MdStop/>
+                {:else}
+                    <MdPlay/>
                 {/if}
             </Button>
         </div>
