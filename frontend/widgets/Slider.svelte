@@ -1,9 +1,10 @@
 <script>
     let m = { x: 0, y: 0 };
+    let track;
 
     function moveSlider(event) {
-        let offsetY = document.getElementsByClassName('track')[0].offsetTop
-        let bottomLimit = document.getElementsByClassName('track')[0].getBoundingClientRect().bottom
+        let offsetY = track.offsetTop
+        let bottomLimit = track.getBoundingClientRect().bottom
         let temp = event.clientY - offsetY - (19.2/2);
         if (event.clientY < bottomLimit && event.clientY > offsetY) {
             m.y = temp
@@ -57,6 +58,6 @@
 <div id="slider" class="base" on:click on:mousedown>
     <div class="knob" on:mousemove="{moveSlider}" style="position:relative; top:{m.y}px;">
     </div>
-    <div class="track">
+    <div class="track" bind:this={track}>
     </div>
 </div>
