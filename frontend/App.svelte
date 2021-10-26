@@ -29,6 +29,7 @@
     function toggleOff () {
         off = !off;
         updateBrightness();
+        if (!running) executor.runOnce();
     }
 
     function brightnessChanged(newBrightness) {
@@ -38,6 +39,7 @@
         else
             off = false;
         updateBrightness();
+        if (!running) executor.runOnce();
     }
 </script>
 

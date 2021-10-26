@@ -96,22 +96,32 @@ export class Executor {
         return now - (this._startTime || 0);
     }
 
-    start() {
+    _resumeTime() {
         if (this._stopTime) {
             this._startTime += this._now() - this._stopTime;
             this._stopTime = undefined;
-        } else {
-            this._startTime = this._now();
+            return true;
         }
-        const doFrame = () => {
-            this.execute(this._now());
-            for (const v of this.views.values()) v.render();
-        };
+        this._startTime = this._now();
+        return false;
+    }
+
+    _pauseTime() {
+        this._stopTime = this._now();
+    }
+
+    _doFrame() {
+        this.execute(this._now());
+        for (const v of this.views.values()) v.render();
+    }
+
+    start() {
+        this._resumeTime();
         if (typeof window === 'undefined') {
-            this._animReq = setInterval(doFrame, this._interval_ms);
+            this._animReq = setInterval(this._doFrame, this._interval_ms);
         } else {
             const onFrame = () => {
-                doFrame();
+                this._doFrame();
                 this._animReq = requestAnimationFrame(onFrame);
             };
             this._animReq = requestAnimationFrame(onFrame);
@@ -119,11 +129,17 @@ export class Executor {
     }
 
     stop() {
-        this._stopTime = this._now();
+        this._pauseTime();
         if (typeof window === 'undefined') {
             clearInterval(this._animReq);
         } else {
             cancelAnimationFrame(this._animReq);
         }
+    }
+
+    runOnce() {
+        const time = this._stopTime || this._now();
+        this.execute(time);
+        for (const v of this.views.values()) v.render();
     }
 }
