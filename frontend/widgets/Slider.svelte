@@ -1,3 +1,12 @@
+<script>
+    import {spring} from 'svelte/motion'
+
+    let coords = spring({ x: 0, y: 0}, {
+        stiffness: 1,
+		damping: 0.9
+    });
+</script>
+
 <style>
     .base {
         display: inline-block;
@@ -41,8 +50,8 @@
     }
 </style>
 
-<div class="base" on:click on:mousedown>
-    <div class="knob">
+<div class="base" on:click on:mousedown on:mousemove="{e => coords.set({ x: e.clientX, y: e.offsetY })}">
+    <div class="knob" style="position:relative; top:{$coords.y}px; left:0;">
     </div>
     <div class="track">
     </div>
