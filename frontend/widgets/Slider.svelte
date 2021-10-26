@@ -1,5 +1,5 @@
 <script>
-    let m = { x: 0, y: 0 };
+    let m = { x: 0, y: 50 };
     let track;
 
     function moveSlider(event) {
@@ -23,6 +23,7 @@
         border-radius: 10px;
         padding: 12%;
         background-color: #d9d6d0;
+        touch-action: none;
     }
     .knob {
         background-color: #d9d6d0;
@@ -55,8 +56,8 @@
     }
 </style>
 
-<div id="slider" class="base" on:click on:mousedown>
-    <div class="knob" on:mousemove="{moveSlider}" style="position:relative; top:{m.y}px;">
+<div class="base" on:click on:pointermove="{moveSlider}">
+    <div class="knob" style="position:relative; top:{m.y}px;">
     </div>
     <div class="track" bind:this={track}>
     </div>
