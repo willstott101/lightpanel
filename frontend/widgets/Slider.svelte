@@ -1,13 +1,18 @@
 <script>
-    let m = { x: 0, y: 50 };
+    export let value = 0.5;
+    let y = 80-(19.2/2);
     let track;
+    let press = false
 
     function moveSlider(event) {
-        let offsetY = track.offsetTop
-        let bottomLimit = track.getBoundingClientRect().bottom
-        let temp = event.clientY - offsetY - (19.2/2);
-        if (event.clientY < bottomLimit && event.clientY > offsetY) {
-            m.y = temp
+        if (press) {
+            let offsetY = track.offsetTop
+            let bottomLimit = track.getBoundingClientRect().bottom
+            let length = bottomLimit - offsetY
+            if (event.clientY < bottomLimit && event.clientY > offsetY) {
+                y = event.clientY - offsetY - (19.2/2);
+            }
+            value = (y+(19.2/2))/length
         }
     }
 </script>
@@ -36,6 +41,7 @@
             8px 1px 20px 0px rgb(0 0 0 / 20%),
             2px 4px 5px 1px rgb(0 0 0 / 20%),
             inset 1px 2px 3px 0px #ffffff57;
+        cursor: pointer;
     }
     .knob:after {
         content: "";
@@ -56,8 +62,11 @@
     }
 </style>
 
-<div class="base" on:click on:pointermove="{moveSlider}">
-    <div class="knob" style="position:relative; top:{m.y}px;">
+<div class="base" on:pointermove="{moveSlider}">
+    <div class="knob" on:pointerup on:mouseup="{() => press = false}" on:mousedown="{() => press = true}" style="position:relative; top:{y}px;">
+        <!-- events mouseup and mousedown used to check if user is clicked on the knob
+             event pointerup is used in app.svelte to trigger the register the value change.
+        -->
     </div>
     <div class="track" bind:this={track}>
     </div>
