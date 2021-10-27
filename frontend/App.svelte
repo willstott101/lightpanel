@@ -99,7 +99,7 @@
             grid-row-start: 1;
             grid-row-end: 3;
         ">
-            <Slider/>
+            <Slider on:pointerup={brightnessChanged(brightness)} bind:value={brightness}/>
         </div>
     </div>
 </div>
