@@ -5,7 +5,7 @@
     let press = false
 
     function moveSlider(event) {
-        if (press) {
+        if (press || event.pointertype != "mouse") {
             let offsetY = track.offsetTop
             let bottomLimit = track.getBoundingClientRect().bottom
             let length = bottomLimit - offsetY
