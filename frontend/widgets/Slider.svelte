@@ -2,10 +2,9 @@
     export let value = 0.5;
     let y = 80-(19.2/2);
     let track;
-    let press = false
 
     function moveSlider(event) {
-        if (press || event.pointerType != "mouse") {
+        if (event.pressure > 0.1) {
             let offsetY = track.offsetTop
             let bottomLimit = track.getBoundingClientRect().bottom
             let length = bottomLimit - offsetY
@@ -63,11 +62,6 @@
 </style>
 
 <div class="base" on:pointermove="{moveSlider}">
-    <div class="knob" on:pointerup on:mouseup="{() => press = false}" on:mousedown="{() => press = true}" style="position:relative; top:{y}px;">
-        <!-- events mouseup and mousedown used to check if user is clicked on the knob
-             event pointerup is used in app.svelte to trigger the register the value change.
-        -->
-    </div>
-    <div class="track" bind:this={track}>
-    </div>
+    <div class="knob" style="position:relative; top:{y}px;" />
+    <div class="track" bind:this={track} />
 </div>

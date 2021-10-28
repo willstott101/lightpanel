@@ -32,8 +32,7 @@
         if (!running) executor.runOnce();
     }
 
-    function brightnessChanged(newBrightness) {
-        brightness = newBrightness;
+    function brightnessChanged() {
         if (brightness <= 0)
             off = true;
         else
@@ -41,6 +40,8 @@
         updateBrightness();
         if (!running) executor.runOnce();
     }
+
+    $: brightnessChanged(brightness);
 </script>
 
 <style>
@@ -99,7 +100,7 @@
             grid-row-start: 1;
             grid-row-end: 3;
         ">
-            <Slider on:pointerup={brightnessChanged(brightness)} bind:value={brightness}/>
+            <Slider bind:value={brightness}/>
         </div>
     </div>
 </div>
