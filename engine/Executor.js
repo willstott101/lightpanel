@@ -12,6 +12,7 @@ export class Executor {
         this._startTime = this._now();
         this._stopTime = undefined;
         this._maxBrightness = 1;
+        this._maxBlue = 1;
     }
 
     addView(name, view) {
@@ -52,7 +53,7 @@ export class Executor {
                 const j = i * 3;
                 this.data[j + 0] = color.r;
                 this.data[j + 1] = color.g;
-                this.data[j + 2] = color.b;
+                this.data[j + 2] = color.b * this._maxBlue;
             }
 
             if (this._maxBrightness < 1) {
@@ -89,6 +90,14 @@ export class Executor {
 
     set maxBrightness(val) {
       return this._maxBrightness = val;
+    }
+
+    get maxBlue() {
+        return this._maxBlue;
+    }
+
+    set maxBlue(val) {
+        return this._maxBlue = val;
     }
 
     _now() {

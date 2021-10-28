@@ -18,12 +18,17 @@
 
     let off = false;
     let brightness = 1;
+    let blue = 1;
 
     function updateBrightness () {
         if (off)
             executor.maxBrightness = 0;
         else
             executor.maxBrightness = brightness;
+    }
+
+    function updateBlue() {
+        executor.maxBlue = blue
     }
 
     function toggleOff () {
@@ -42,6 +47,7 @@
     }
 
     $: brightnessChanged(brightness);
+    $: updateBlue(blue);
 </script>
 
 <style>
@@ -55,8 +61,8 @@
     }
     .grid {
         display: inline-grid;
-        grid-template-columns: auto 6em 6em;
-        grid-template-rows: 6em 6em;
+        grid-template-columns: auto 6em 6em 6em;
+        grid-template-rows: 6em 6em 6em;
     }
 </style>
 
@@ -101,6 +107,14 @@
             grid-row-end: 3;
         ">
             <Slider bind:value={brightness}/>
+        </div>
+        <div style="
+            grid-column-start: 4;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        ">
+            <Slider bind:value={blue}/>
         </div>
     </div>
 </div>
