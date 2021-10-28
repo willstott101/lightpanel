@@ -1,17 +1,14 @@
 <script>
+    import { remap, clamp } from "../../engine/math.js";
+
     export let value = 0.5;
-    let y = 80-(19.2/2);
     let track;
 
-    function moveSlider(event) {
+    const moveSlider = (event) => {
         if (event.pressure > 0.1) {
-            let offsetY = track.offsetTop
-            let bottomLimit = track.getBoundingClientRect().bottom
-            let length = bottomLimit - offsetY
-            if (event.clientY < bottomLimit && event.clientY > offsetY) {
-                y = event.clientY - offsetY - (19.2/2);
-            }
-            value = 1-(y+(19.2/2))/length
+            let trackRect = track.getBoundingClientRect();
+            let v = remap(event.clientY, trackRect.bottom, trackRect.top, 0, 1, true);
+            value = clamp(v, 0, 1);
         }
     }
 </script>
@@ -25,9 +22,10 @@
         height: 100%;
         border: 3px solid transparent;
         border-radius: 10px;
-        padding: 12%;
+        padding: 20% 10%;
         background-color: #d9d6d0;
         touch-action: none;
+        user-select: none;
     }
     .knob {
         background-color: #d9d6d0;
@@ -41,27 +39,36 @@
             2px 4px 5px 1px rgb(0 0 0 / 20%),
             inset 1px 2px 3px 0px #ffffff57;
         cursor: pointer;
+        position: relative;
+        transform: translateY(-50%);
     }
     .knob:after {
-        content: "";
-        display: block;
         width: 80%;
-        box-shadow: inset 1px 2px 3px 0px #0003;
         height: 0.2em;
         margin: auto;
         margin-top: 0.5em;
     }
     .track {
         height: 100%;
-        background: #0002;
+        width: 100%;
+        margin: auto;
+    }
+    .track:after {
+        height: 100%;
         width: 4px;
-        box-shadow: inset 1px 2px 3px 0px #0004;
+        background: #0002;
         margin: auto;
         border-radius: 4px;
     }
+    .knob:after, .track:after {
+        content: "";
+        display: block;
+        box-shadow: inset 1px 2px 3px 0px #0004;
+    }
 </style>
 
-<div class="base" on:pointermove="{moveSlider}">
-    <div class="knob" style="position:relative; top:{y}px;" />
-    <div class="track" bind:this={track} />
+<div class="base" on:pointermove="{moveSlider}" on:pointerout="{moveSlider}">
+    <div class="track" bind:this={track}>
+        <div class="knob" style="top:{(1 - value) * 100}%;" />
+    </div>
 </div>

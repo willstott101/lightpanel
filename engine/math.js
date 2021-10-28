@@ -1,4 +1,10 @@
 
+export function clamp(t, min, max) {
+    if (t > max) return max;
+    if (t < min) return min;
+    return t;
+}
+
 export function remap(t, min, max, targetMin, targetMax) {
     const startRange = (max - min);
     const targetRange = (targetMax - targetMin);
