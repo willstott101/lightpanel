@@ -11,7 +11,7 @@
             if (event.clientY < bottomLimit && event.clientY > offsetY) {
                 y = event.clientY - offsetY - (19.2/2);
             }
-            value = (y+(19.2/2))/length
+            value = 1-(y+(19.2/2))/length
         }
     }
 </script>
