@@ -4,10 +4,10 @@
     export let value = 0.5;
     let track;
 
-    const moveSlider = (event) => {
+    function moveSlider(event) {
         if (event.pressure > 0.1) {
-            let trackRect = track.getBoundingClientRect();
-            let v = remap(event.clientY, trackRect.bottom, trackRect.top, 0, 1, true);
+            let rect = track.getBoundingClientRect();
+            let v = remap(event.clientY, rect.bottom, rect.top, 0, 1);
             value = clamp(v, 0, 1);
         }
     }
