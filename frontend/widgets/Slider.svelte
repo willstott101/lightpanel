@@ -1,6 +1,5 @@
 <script>
     export let value = 0.5;
-    let y = 80-(19.2/2);
     let track;
 
     function moveSlider(event) {
@@ -8,10 +7,9 @@
             let offsetY = track.offsetTop
             let bottomLimit = track.getBoundingClientRect().bottom
             let length = bottomLimit - offsetY
-            if (event.clientY < bottomLimit && event.clientY > offsetY) {
-                y = event.clientY - offsetY - (19.2/2);
-            }
-            value = 1-(y+(19.2/2))/length
+            if (event.clientY > bottomLimit) value = 0;
+            else if (event.clientY < offsetY) value = 1;
+            else value = 1-(event.clientY - offsetY)/length;
         }
     }
 </script>
@@ -28,6 +26,7 @@
         padding: 12%;
         background-color: #d9d6d0;
         touch-action: none;
+        user-select: none;
     }
     .knob {
         background-color: #d9d6d0;
@@ -41,6 +40,7 @@
             2px 4px 5px 1px rgb(0 0 0 / 20%),
             inset 1px 2px 3px 0px #ffffff57;
         cursor: pointer;
+        transform: translate(0, -50%);
     }
     .knob:after {
         content: "";
@@ -62,6 +62,6 @@
 </style>
 
 <div class="base" on:pointermove="{moveSlider}">
-    <div class="knob" style="position:relative; top:{y}px;" />
+    <div class="knob" style="position:relative; top:{(1-value)*100}%;" />
     <div class="track" bind:this={track} />
 </div>
