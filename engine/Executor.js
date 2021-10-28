@@ -10,6 +10,7 @@ export class Executor {
         this._config = defaultPattern.config;
         this._interval_ms = (1 / targetFps) * 1000;
         this._startTime = this._now();
+        this._lastTime = this._startTime;
         this._stopTime = undefined;
         this._maxBrightness = 1;
         this._maxBlue = 1;
@@ -62,7 +63,7 @@ export class Executor {
         } else {
             this._clear();
         }
-
+        this._lastTime = time;
     }
 
     _clear() {
@@ -147,7 +148,7 @@ export class Executor {
     }
 
     runOnce() {
-        const time = this._stopTime || this._now();
+        const time = this._stopTime ? this._lastTime : this._now();
         this.execute(time);
         for (const v of this.views.values()) v.render();
     }
