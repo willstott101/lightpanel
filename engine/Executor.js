@@ -12,7 +12,7 @@ export class Executor {
         this._startTime = this._now();
         this._lastTime = this._startTime;
         this._stopTime = undefined;
-        this._maxBrightness = 1;
+        this._maxBrightness = 0.75;
     }
 
     addView(name, view) {

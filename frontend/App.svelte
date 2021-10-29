@@ -17,7 +17,8 @@
     }
 
     let off = false;
-    let brightness = 1;
+    const defaultBrightness = executor.maxBrightness;
+    let brightness = defaultBrightness;
 
     function updateBrightness () {
         if (off)
@@ -28,6 +29,8 @@
 
     function toggleOff () {
         off = !off;
+        if (!off && brightness === 0)
+            brightness = defaultBrightness;
         updateBrightness();
         if (!running) executor.runOnce();
     }
