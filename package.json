@@ -2,9 +2,9 @@
   "name": "lightpanel",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "parcel frontend/index.html",
+    "build": "parcel build frontend/index.html",
     "start": "node server/index.js"
   },
   "repository": {
@@ -23,13 +23,13 @@
     "node-libpng": "^0.2.20",
     "serialport": "^9.2.0",
     "simple-color-converter": "^2.1.13",
-    "svelte-icons": "^2.1.0"
+    "svelte-icons": "^2.1.0",
+    "svelte": "^3.44.1"
   },
   "devDependencies": {
     "svelte-preprocess": "^4.9.8",
     "parcel": "^2.0.0",
-    "parcel-transformer-svelte": "^1.1.2",
-    "sass": "^1.43.3",
-    "svelte": "^3.44.0"
+    "parcel-transformer-svelte": "^1.2.3",
+    "sass": "^1.43.4"
   }
 }
