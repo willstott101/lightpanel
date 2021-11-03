@@ -1,5 +1,6 @@
 import { horizontalZigZagPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/indexSnake.js";
+import { clamp } from "./math.js"
 
 export class Executor {
     pixelMap = [];
@@ -13,7 +14,11 @@ export class Executor {
         this._lastTime = this._startTime;
         this._stopTime = undefined;
         this._maxBrightness = 1;
-        this._maxBlue = 1;
+        this._targetWhite = {
+            r: 255,
+            g: 255,
+            b: 255
+        }
     }
 
     addView(name, view) {
@@ -52,9 +57,9 @@ export class Executor {
                     index: i,
                 }), this._config, g);
                 const j = i * 3;
-                this.data[j + 0] = color.r;
-                this.data[j + 1] = color.g;
-                this.data[j + 2] = color.b * this._maxBlue;
+                this.data[j + 0] = clamp(color.r * (255/this._targetWhite.r), 0, 255);
+                this.data[j + 1] = clamp(color.g * (255/this._targetWhite.g), 0, 255);
+                this.data[j + 2] = clamp(color.b * (255/this._targetWhite.b), 0, 255);
             }
 
             if (this._maxBrightness < 1) {
@@ -93,12 +98,12 @@ export class Executor {
       return this._maxBrightness = val;
     }
 
-    get maxBlue() {
-        return this._maxBlue;
+    get targetWhite() {
+        return this._targetWhite;
     }
 
-    set maxBlue(val) {
-        return this._maxBlue = val;
+    set targetWhite(val) {
+        return this._targetWhite = val;
     }
 
     _now() {

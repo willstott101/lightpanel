@@ -18,7 +18,7 @@
 
     let off = false;
     let brightness = 1;
-    let blue = 1;
+    let balance = 0;
 
     function updateBrightness () {
         if (off)
@@ -27,8 +27,12 @@
             executor.maxBrightness = brightness;
     }
 
-    function updateBlue() {
-        executor.maxBlue = blue
+    function updateBalance() {
+        executor.targetWhite = {
+            r: 255 - 255 * (balance*0.10),//all the maths works, just need to change these values depending on how much of each color is wanted.
+            g: 255 - 255 * (balance*0.03),//The bigger the balance multiplier, the greater the change in color.
+            b: 255 - 255 * (balance*0.04)
+        }
     }
 
     function toggleOff () {
@@ -47,7 +51,7 @@
     }
 
     $: brightnessChanged(brightness);
-    $: updateBlue(blue);
+    $: updateBalance(balance)
 </script>
 
 <style>
@@ -62,7 +66,7 @@
     .grid {
         display: inline-grid;
         grid-template-columns: auto 6em 6em 6em;
-        grid-template-rows: 6em 6em 6em;
+        grid-template-rows: 6em 6em;
     }
 </style>
 
@@ -114,7 +118,7 @@
             grid-row-start: 1;
             grid-row-end: 3;
         ">
-            <Slider bind:value={blue}/>
+            <Slider bind:value={balance}/>
         </div>
     </div>
 </div>
