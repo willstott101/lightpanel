@@ -91,9 +91,9 @@
         ">
             <Button on:mousedown={togglePause} enabled={running}>
                 {#if running}
-                    <MdStop/>
-                {:else}
                     <MdPlay/>
+                {:else}
+                    <MdStop/>
                 {/if}
             </Button>
         </div>
