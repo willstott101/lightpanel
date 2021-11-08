@@ -4,7 +4,7 @@ import { clamp } from "./math.js"
 
 export class Executor {
     pixelMap = [];
-    data = new Uint8Array();
+    data = new Uint8ClampedArray();
     constructor(targetFps = 60) {
         this.views = new Map();
         this._patch = defaultPattern;
@@ -33,7 +33,7 @@ export class Executor {
         horizontalZigZagPixelMap(
             this.pixelMap, this.pixelMap.length, count, startPos, xDist, yDist, xCount);
         const oldData = this.data;
-        this.data = new Uint8Array(this.pixelMap.length * 3);
+        this.data = new Uint8ClampedArray(this.pixelMap.length * 3);
         this.data.set(oldData, 0);
     }
 
