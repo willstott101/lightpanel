@@ -19,6 +19,7 @@
     let off = false;
     const defaultBrightness = executor.maxBrightness;
     let brightness = defaultBrightness;
+    let balance = executor.whiteBalance;
 
     function updateBrightness () {
         if (off)
@@ -45,6 +46,7 @@
     }
 
     $: brightnessChanged(brightness);
+    $: executor.whiteBalance = balance;
 </script>
 
 <style>
@@ -58,7 +60,7 @@
     }
     .grid {
         display: inline-grid;
-        grid-template-columns: auto 6em 6em;
+        grid-template-columns: auto 6em 6em 6em;
         grid-template-rows: 6em 6em;
     }
 </style>
@@ -104,6 +106,14 @@
             grid-row-end: 3;
         ">
             <Slider bind:value={brightness}/>
+        </div>
+        <div style="
+            grid-column-start: 4;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        ">
+            <Slider bind:value={balance}/>
         </div>
     </div>
 </div>

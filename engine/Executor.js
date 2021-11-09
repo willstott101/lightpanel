@@ -1,5 +1,6 @@
 import { horizontalZigZagPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/indexSnake.js";
+import { clamp } from "./math.js"
 
 export class Executor {
     pixelMap = [];
@@ -13,6 +14,12 @@ export class Executor {
         this._lastTime = this._startTime;
         this._stopTime = undefined;
         this._maxBrightness = 0.75;
+        this._whiteBalance = 0
+        this._whiteBalanceMultiplier = {
+            r: 1,
+            g: 1,
+            b: 1
+        }
     }
 
     addView(name, view) {
@@ -49,9 +56,9 @@ export class Executor {
                 p.index = i;
                 const color = this._patch.pixel(p, this._config, g);
                 const j = i * 3;
-                this.data[j + 0] = color.r;
-                this.data[j + 1] = color.g;
-                this.data[j + 2] = color.b;
+                this.data[j + 0] = color.r * this._whiteBalanceMultiplier.r;
+                this.data[j + 1] = color.g * this._whiteBalanceMultiplier.g;
+                this.data[j + 2] = color.b * this._whiteBalanceMultiplier.b;
             }
 
             if (this._maxBrightness < 1) {
@@ -83,11 +90,24 @@ export class Executor {
     }
 
     get maxBrightness() {
-      return this._maxBrightness;
+        return this._maxBrightness;
     }
 
     set maxBrightness(val) {
-      return this._maxBrightness = val;
+        this._maxBrightness = val;
+    }
+
+    get whiteBalance() {
+        return this._whiteBalance;
+    }
+
+    set whiteBalance(val) {
+        this._whiteBalanceMultiplier = {
+            r: 255 / (255 - 255 * (val*0.10)),
+            g: 255 / (255 - 255 * (val*0.03)),
+            b: 255 / (255 - 255 * (val*0.04))
+        }
+        this._whiteBalance = val;
     }
 
     _now() {
