@@ -1,6 +1,5 @@
 import { horizontalZigZagPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/indexSnake.js";
-import { clamp } from "./math.js"
 
 export class Executor {
     pixelMap = [];
