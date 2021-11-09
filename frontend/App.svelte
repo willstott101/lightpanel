@@ -19,21 +19,13 @@
     let off = false;
     const defaultBrightness = executor.maxBrightness;
     let brightness = defaultBrightness;
-    let balance = 0;
+    let balance = executor.whiteBalance;
 
     function updateBrightness () {
         if (off)
             executor.maxBrightness = 0;
         else
             executor.maxBrightness = brightness;
-    }
-
-    function updateBalance() {
-        executor.targetWhite = {
-            r: 255 - 255 * (balance*0.10),//all the maths works, just need to change these values depending on how much of each color is wanted.
-            g: 255 - 255 * (balance*0.03),//The bigger the balance multiplier, the greater the change in color.
-            b: 255 - 255 * (balance*0.04)
-        }
     }
 
     function toggleOff () {
@@ -54,7 +46,7 @@
     }
 
     $: brightnessChanged(brightness);
-    $: updateBalance(balance)
+    $: executor.whiteBalance = balance;
 </script>
 
 <style>

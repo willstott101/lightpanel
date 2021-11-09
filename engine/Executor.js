@@ -14,10 +14,11 @@ export class Executor {
         this._lastTime = this._startTime;
         this._stopTime = undefined;
         this._maxBrightness = 0.75;
-        this._targetWhite = {
-            r: 255,
-            g: 255,
-            b: 255
+        this._whiteBalance = 0
+        this._whiteBalanceMultiplier = {
+            r: 1,
+            g: 1,
+            b: 1
         }
     }
 
@@ -57,9 +58,9 @@ export class Executor {
                     index: i,
                 }), this._config, g);
                 const j = i * 3;
-                this.data[j + 0] = clamp(color.r * (255/this._targetWhite.r), 0, 255);
-                this.data[j + 1] = clamp(color.g * (255/this._targetWhite.g), 0, 255);
-                this.data[j + 2] = clamp(color.b * (255/this._targetWhite.b), 0, 255);
+                this.data[j + 0] = color.r * this._whiteBalanceMultiplier.r;
+                this.data[j + 1] = color.g * this._whiteBalanceMultiplier.g;
+                this.data[j + 2] = color.b * this._whiteBalanceMultiplier.b;
             }
 
             if (this._maxBrightness < 1) {
@@ -98,12 +99,17 @@ export class Executor {
       return this._maxBrightness = val;
     }
 
-    get targetWhite() {
-        return this._targetWhite;
+    get whiteBalance() {
+        return this._whiteBalance;
     }
 
-    set targetWhite(val) {
-        return this._targetWhite = val;
+    set whiteBalance(val) {
+        this._whiteBalanceMultiplier = {
+            r: 255 / (255 - 255 * (val*0.10)),
+            g: 255 / (255 - 255 * (val*0.03)),
+            b: 255 / (255 - 255 * (val*0.04))
+        }
+        return this._whiteBalance = val;
     }
 
     _now() {
