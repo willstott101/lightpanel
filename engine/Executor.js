@@ -92,11 +92,11 @@ export class Executor {
     }
 
     get maxBrightness() {
-      return this._maxBrightness;
+        return this._maxBrightness;
     }
 
     set maxBrightness(val) {
-      return this._maxBrightness = val;
+        this._maxBrightness = val;
     }
 
     get whiteBalance() {
@@ -109,7 +109,7 @@ export class Executor {
             g: 255 / (255 - 255 * (val*0.03)),
             b: 255 / (255 - 255 * (val*0.04))
         }
-        return this._whiteBalance = val;
+        this._whiteBalance = val;
     }
 
     _now() {
