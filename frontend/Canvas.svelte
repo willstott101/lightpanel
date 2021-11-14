@@ -22,7 +22,7 @@
 </style>
 
 <div>
-    <canvas id={id} bind:this={canvas} width="48" height="25">
+    <canvas id={id} bind:this={canvas}>
         Get a canvas compatible browser please.
     </canvas>
 </div>

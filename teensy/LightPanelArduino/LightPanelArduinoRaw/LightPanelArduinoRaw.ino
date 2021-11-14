@@ -39,7 +39,6 @@
 */
 
 #include <OctoWS2811.h>
-#include <PNGdec.h>
 
 const int onboardLedPin = 13;
 bool ledOn = false;
@@ -53,17 +52,21 @@ void toggleOnboardLed() {
   }
 }
 
-// Only the last strip has this many
-const int ledsPerStrip = 4 * 48;
-// The first 7 have 3 * 38
+const unsigned int WIDTH = 16;
+const unsigned int HEIGHT = 25;
+
+// Only the last strip has 4 rows
+const int ledsPerStrip = 4 * WIDTH;
+// Most have have 2 or 3 rows per strip
 const int numStrips = 8;
 
 DMAMEM int displayMemory[ledsPerStrip*numStrips];
 int drawingMemory[ledsPerStrip*numStrips];
 
-// The PNG should never actually be this big.
-// 3 colours, 8 strips, 150 per strip, 1024 extra for headers and seperator etc
-const uint ringLen = 3 * 8 * 150 + 1024;
+int dataToPixelMap[] = {128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495};
+
+// 3 colours, 25 x 48, + 80 for fun (and the seperator)
+const uint ringLen = 3 * HEIGHT * WIDTH + 80;
 byte ringBuffer[ringLen];
 unsigned int ringStart = 0;
 unsigned int ringLast = ringLen - 1;
@@ -146,53 +149,24 @@ void setup() {
   // Serial.begin(57600);
 }
 
-//typedef struct png_draw_tag
-//{
-//    int y; // starting x,y of this line
-//    int iWidth; // size of this line
-//    int iPitch; // bytes per line
-//    int iPixelType; // PNG pixel type (0,2,3,4,6)
-//        PNG_PIXEL_GRAYSCALE=0,
-//        PNG_PIXEL_TRUECOLOR=2,
-//        PNG_PIXEL_INDEXED=3,
-//        PNG_PIXEL_GRAY_ALPHA=4,
-//        PNG_PIXEL_TRUECOLOR_ALPHA=6
-//    int iBpp; // bits per color stimulus
-//    void *pUser; // user supplied pointer
-//    uint8_t *pPalette;
-//    uint16_t *pFastPalette;
-//    uint8_t *pPixels;
-//} PNGDRAW;
-
-void onImageLineDecoded(PNGDRAW *pDraw) {
-  const int line = pDraw->y * pDraw->iWidth;
-  const unsigned int pixelWidth = pDraw->iPitch / pDraw->iWidth;
-  if (pDraw->iPixelType == PNG_PIXEL_GRAYSCALE || pDraw->iPixelType == PNG_PIXEL_GRAY_ALPHA) {
-    for (int i = 0; i < pDraw->iWidth; i++) {
-      uint32_t color = 65536 * (*(pDraw->pPixels + (i * pixelWidth)));
-      leds.setPixel(line + i, color);
+void decodeImage() {
+//  for (unsigned int y = 0; y < HEIGHT; y++) {
+  for (unsigned int y = 0; y < 1; y++) {
+    unsigned int yDataPixIdx = y * WIDTH;
+    // for (unsigned int x = 0; x < WIDTH; x++) {
+    for (unsigned int x = 0; x < 1; x++) {
+      unsigned int dataPixIndex = yDataPixIdx + x;
+//      unsigned int dataIndex = dataPixIndex * 3;
+//      uint8_t r = dataBuffer[dataIndex];
+//      uint8_t g = dataBuffer[dataIndex + 1];
+//      uint8_t b = dataBuffer[dataIndex + 2];
+//      uint32_t color = (r << 24) + (g << 16) + (b << 8);
+//      GREEN = 0x0000FF
+//      BLUE = 0x00FF00
+//      RED = 0xFF0000
+      leds.setPixel(dataToPixelMap[dataPixIndex], 0x222222);
     }
-  } else if (pDraw->iPixelType == PNG_PIXEL_TRUECOLOR || pDraw->iPixelType == PNG_PIXEL_TRUECOLOR_ALPHA) {
-    for (int i = 0; i < pDraw->iWidth; i++) {
-      uint8_t r = *(pDraw->pPixels + (i * pixelWidth));
-      uint8_t g = *(pDraw->pPixels + (i * pixelWidth) + 1);
-      uint8_t b = *(pDraw->pPixels + (i * pixelWidth) + 2);
-      uint32_t color = (r << 24) + (g << 16) + (b << 8);
-      leds.setPixel(line + i, color);
-    }
-  } else if (pDraw->iPixelType == PNG_PIXEL_INDEXED) {
-    
   }
-}
-
-int decodeImage() {
-  PNG png;
-  int r = png.openRAM(dataBuffer, bufferSize, onImageLineDecoded);
-  if (r == PNG_SUCCESS) {
-    r = png.decode(nullptr, 0);
-  }
-  png.close();
-  return r;
 }
 
 void loop() {
@@ -202,12 +176,8 @@ void loop() {
     if (checkRingForSeperator()) {
       copyBufferedImage();
       // toggleOnboardLed();
-      int r = decodeImage();
-      if (r == PNG_SUCCESS) {
-        toggleOnboardLed();
-      } else {
-        // Maybe send somethign over serial?
-      }
+      decodeImage();
+      toggleOnboardLed();
       leds.show();
     }
   }

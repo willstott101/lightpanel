@@ -1,4 +1,4 @@
-import { horizontalZigZagPixelMap } from "./layout.js";
+import { horizontalScanPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/indexSnake.js";
 
 export class Executor {
@@ -19,6 +19,8 @@ export class Executor {
             g: 1,
             b: 1
         }
+        this.width = 0;
+        this.height = 0;
     }
 
     addView(name, view) {
@@ -29,12 +31,24 @@ export class Executor {
         return this.views.get(name);
     }
 
-    addHorizontalZigZag(count, startPos, xDist, yDist, xCount) {
-        horizontalZigZagPixelMap(
-            this.pixelMap, this.pixelMap.length, count, startPos, xDist, yDist, xCount);
+    addHorizontalScan(count, startPos, size, xCount) {
+        horizontalScanPixelMap(
+            this.pixelMap, count, startPos, size, xCount);
         const oldData = this.data;
         this.data = new Uint8ClampedArray(this.pixelMap.length * 3);
         this.data.set(oldData, 0);
+        this.refreshSize();
+    }
+
+    refreshSize() {
+        this.width = this.pixelMap.reduce((v, p) => {
+            const m = p.x + p.width - 1;
+            return m > v ? m : v;
+        }, 0);
+        this.height = this.pixelMap.reduce((v, p) => {
+            const m = p.y + p.height - 1;
+            return m > v ? m : v;
+        }, 0);
     }
 
     execute(time) {
@@ -46,6 +60,8 @@ export class Executor {
                 time: time,
                 random: Math.random(),
                 length: this.pixelMap.length,
+                width: this.width,
+                height: this.height,
             };
             let g;
             if (this._patch.global)
@@ -136,7 +152,7 @@ export class Executor {
     start() {
         this._resumeTime();
         if (typeof window === 'undefined') {
-            this._animReq = setInterval(this._doFrame, this._interval_ms);
+            this._animReq = setInterval(this._doFrame.bind(this), this._interval_ms);
         } else {
             const onFrame = () => {
                 this._doFrame();

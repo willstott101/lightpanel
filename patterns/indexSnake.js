@@ -5,7 +5,7 @@ export default {
     config: {
         period: 500,
         trail: 6,
-        count: 90,
+        count: 30,
         primaryColor: {
             r: 255,
             g: 120,

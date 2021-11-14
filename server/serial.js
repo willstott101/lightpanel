@@ -1,5 +1,5 @@
 import SerialPort from 'serialport';
-import { encode } from 'node-libpng';
+// import { encode } from 'node-libpng';
 import { Buffer } from 'buffer';
 
 const SEP = "SEPERATING TEXT";
@@ -21,19 +21,19 @@ export class SerialView {
         let timeMs = (new Date()).getTime();
         const height = this.executor.data.length / (this.width * 3);
         
-        const buf = Buffer.from(this.executor.data.buffer);
-        const basic = encode(buf, {
-            width: this.width,
-            height: height,
-            compressionLevel: 9,
-        });
+        let buf = Buffer.from(this.executor.data.buffer);
+        // buf = encode(buf, {
+        //     width: this.width,
+        //     height: height,
+        //     compressionLevel: 9,
+        // });
 
         if (this.port) {
-            this.port.write(basic);
+            this.port.write(buf);
             this.port.write(SEP);
         }
         let timeMsEnd = (new Date()).getTime();
-        console.log("frame of size", basic.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
+        console.log("frame of size", buf.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
     }
 }
 
