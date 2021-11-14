@@ -3,18 +3,18 @@ import { quantize } from "../engine/math.js";
 
 export default {
     config: {
-        period: 500,
+        period: 100,
         trail: 6,
-        count: 30,
+        count: 20,
         primaryColor: {
             r: 255,
-            g: 120,
-            b: 120,
+            g: 10,
+            b: 10,
         },
         secondaryColor: {
             r: 0,
-            g: 140,
-            b: 140,
+            g: 128,
+            b: 128,
         },
     },
     global: (p, c) => {

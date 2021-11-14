@@ -1,9 +1,9 @@
 import { Executor } from "../engine/Executor.js";
 
-export const executor = new Executor(60);
+export const executor = new Executor(80);
 executor.addHorizontalScan(
-    375, // Num LED pixels
+    400, // Num LED pixels
     {x: 0, y: 0}, // Start pos
-    {x: 3, y: 1}, // Distance between LEDs
-    15, // Count per row
+    {x: 3, y: 1}, // Size of LEDs (and distance)
+    16, // Count per row
 );

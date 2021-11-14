@@ -9,12 +9,12 @@ export default {
         primaryColor: {
             r: 255,
             g: 0,
-            b: 120,
+            b: 10,
         },
         secondaryColor: {
             r: 0,
-            g: 140,
-            b: 140,
+            g: 70,
+            b: 70,
         },
     },
     global: (p, c) => {

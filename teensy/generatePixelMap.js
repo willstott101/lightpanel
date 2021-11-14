@@ -6,9 +6,9 @@ const rowStrips = [
     0, 0, 0,
     3, 3, 3,
     1, 1, 1,
+    6, 6, 6, 6,
     4, 4, 4, 4,
-    5, 5, 5, 5,
-    6, 6,
+    5, 5,
     7, 7, 7
 ];
 const rowPosInStrip = [
@@ -16,10 +16,10 @@ const rowPosInStrip = [
     2, 1, 0,
     2, 1, 0,
     2, 1, 0,
-    0, 1, 2, 3,
-    0, 1, 2, 3,
-    0, 1,
-    0, 1, 2,
+    3, 2, 1, 0,
+    3, 2, 1, 0,
+    1, 0,
+    2, 1, 0,
 ];
 
 const maxStripLength = (Math.max(...rowPosInStrip) + 1) * WIDTH;
@@ -30,8 +30,13 @@ const pixmap = [];
 for (let y = 0; y < HEIGHT; y++) {
     let offset = rowStrips[y] * maxStripLength;
     offset += rowPosInStrip[y] * WIDTH;
+    const reverse = rowPosInStrip[y] % 2 === 1;
     for (let x = 0; x < WIDTH; x++) {
-        pixmap.push(offset + x);
+        if (reverse) {
+            pixmap.push(offset + WIDTH - x - 1);    
+        } else {
+            pixmap.push(offset + x);
+        }
     }
 }
 

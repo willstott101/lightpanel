@@ -5,10 +5,8 @@ import { Buffer } from 'buffer';
 const SEP = "SEPERATING TEXT";
 
 export class SerialView {
-    constructor(executor, width) {
+    constructor(executor) {
         this.executor = executor;
-        // this.port = thing;
-        this.width = width;
 
         const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
           baudRate: 115200
@@ -18,13 +16,12 @@ export class SerialView {
         });
     }
     render() {
-        let timeMs = (new Date()).getTime();
-        const height = this.executor.data.length / (this.width * 3);
+        // let timeMs = (new Date()).getTime();
         
         let buf = Buffer.from(this.executor.data.buffer);
         // buf = encode(buf, {
-        //     width: this.width,
-        //     height: height,
+        //     width: this.executor.width,
+        //     height: this.executor.height,
         //     compressionLevel: 9,
         // });
 
@@ -32,8 +29,8 @@ export class SerialView {
             this.port.write(buf);
             this.port.write(SEP);
         }
-        let timeMsEnd = (new Date()).getTime();
-        console.log("frame of size", buf.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
+        // let timeMsEnd = (new Date()).getTime();
+        // console.log("frame of size", buf.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
     }
 }
 

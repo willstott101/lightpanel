@@ -21,7 +21,6 @@
   "dependencies": {
     "autobahn": "^20.9.2",
     "autobahn-browser": "^20.9.2",
-    "node-libpng": "^0.2.20",
     "serialport": "^9.2.0",
     "simple-color-converter": "^2.1.13",
     "svelte-icons": "^2.1.0"

@@ -4,7 +4,7 @@ import defaultPattern from "../patterns/indexSnake.js";
 export class Executor {
     pixelMap = [];
     data = new Uint8ClampedArray();
-    constructor(targetFps = 60) {
+    constructor(targetFps) {
         this.views = new Map();
         this._patch = defaultPattern;
         this._config = defaultPattern.config;
