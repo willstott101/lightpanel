@@ -146,24 +146,18 @@ void setup() {
   pinMode(onboardLedPin, OUTPUT);
   leds.begin();
   leds.show();
-  // Serial.begin(57600);
 }
 
 void decodeImage() {
-//  for (unsigned int y = 0; y < HEIGHT; y++) {
   for (unsigned int y = 0; y < HEIGHT; y++) {
     unsigned int yDataPixIdx = y * WIDTH;
     for (unsigned int x = 0; x < WIDTH; x++) {
-    // for (unsigned int x = 0; x < 1; x++) {
       unsigned int dataPixIndex = yDataPixIdx + x;
       unsigned int dataIndex = dataPixIndex * 3;
       uint8_t r = dataBuffer[dataIndex];
       uint8_t g = dataBuffer[dataIndex + 1];
       uint8_t b = dataBuffer[dataIndex + 2];
       uint32_t color = (r << 16) + (g << 0) + (b << 8);
-//      GREEN = 0x0000FF
-//      BLUE = 0x00FF00
-//      RED = 0xFF0000
       leds.setPixel(dataToPixelMap[dataPixIndex], color);
     }
   }
@@ -175,7 +169,6 @@ void loop() {
     addCharToRing(incomingByte);
     if (checkRingForSeperator()) {
       copyBufferedImage();
-      // toggleOnboardLed();
       decodeImage();
       toggleOnboardLed();
       leds.show();
