@@ -6,47 +6,42 @@
     import MdStop from "svelte-icons/md/MdStop.svelte";
     import FaPowerOff from 'svelte-icons/fa/FaPowerOff.svelte'
     import { executor } from './globals';
+    import { controller } from './globals';
 
     let running = true;
+    let on = true;
+    let brightnessDemand = executor.maxBrightness;
+    let brightnessActual = brightnessDemand;
+    let balanceDemand = executor.whiteBalance;
+    let balanceActual = balanceDemand;
+    executor.addListener((msg) => {
+        if (msg.type === "change") {
+            if (msg.data.field === "maxBrightness") {
+                brightnessActual = msg.data.value;
+            } else if (msg.data.field === "on") {
+                on = msg.data.value;
+            } else if (msg.data.field === "whiteBalance") {
+                balanceActual = msg.data.value;
+            } else if (msg.data.field === "running") {
+                running = msg.data.value;
+            }
+        }
+    });
+
     function togglePause () {
-        running = !running;
-        if (running)
-            executor.start();
+        if (!running)
+            controller.start();
         else
-            executor.stop();
-    }
-
-    let off = false;
-    const defaultBrightness = executor.maxBrightness;
-    let brightness = defaultBrightness;
-    let balance = executor.whiteBalance;
-
-    function updateBrightness () {
-        if (off)
-            executor.maxBrightness = 0;
-        else
-            executor.maxBrightness = brightness;
+            controller.stop();
     }
 
     function toggleOff () {
-        off = !off;
-        if (!off && brightness === 0)
-            brightness = defaultBrightness;
-        updateBrightness();
-        if (!running) executor.runOnce();
+        controller.on = on;
     }
 
-    function brightnessChanged() {
-        if (brightness <= 0)
-            off = true;
-        else
-            off = false;
-        updateBrightness();
-        if (!running) executor.runOnce();
-    }
-
-    $: brightnessChanged(brightness);
-    $: executor.whiteBalance = balance;
+    // but async... so binding is weird
+    $: controller.maxBrightness = brightnessDemand;
+    $: controller.whiteBalance = balanceDemand;
 </script>
 
 <style>
@@ -81,7 +76,7 @@
             /*grid-row-start: 1;*/
             /*grid-row-end: 1;*/
         ">
-            <Button on:mousedown={toggleOff} enabled={!off} iconSize="small">
+            <Button on:mousedown={toggleOff} enabled={on} iconSize="small">
                 <FaPowerOff/>
             </Button>
         </div>
@@ -105,7 +100,7 @@
             grid-row-start: 1;
             grid-row-end: 3;
         ">
-            <Slider bind:value={brightness}/>
+            <Slider bind:valueIn={brightnessActual} bind:valueOut={brightnessDemand}/>
         </div>
         <div style="
             grid-column-start: 4;
@@ -113,7 +108,7 @@
             grid-row-start: 1;
             grid-row-end: 3;
         ">
-            <Slider bind:value={balance}/>
+            <Slider bind:valueIn={balanceActual} bind:valueOut={balanceDemand}/>
         </div>
     </div>
 </div>

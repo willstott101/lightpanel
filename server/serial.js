@@ -7,14 +7,23 @@ const SEP = "SEPERATING TEXT";
 export class SerialView {
     constructor(executor) {
         this.executor = executor;
-
-        const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
-          baudRate: 115200
-        });
-        port.open(() => {
-            this.port = port;
-        });
+        this.port = undefined;
     }
+
+    _open() {
+        try {
+            const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
+              baudRate: 115200
+            });
+            port.open(() => {
+                this.port = port;
+            });
+        } catch (e) {
+            console.log("Error opening serial port");
+            setTimeout(this._open, 500);
+        }
+    }
+
     render() {
         // let timeMs = (new Date()).getTime();
         

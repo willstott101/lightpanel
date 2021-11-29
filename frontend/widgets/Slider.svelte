@@ -1,14 +1,15 @@
 <script>
     import { remap, clamp } from "../../engine/math.js";
 
-    export let value = 0.5;
+    export let valueIn = 0.5;
+    export let valueOut = 0.5;
     let track;
 
     function moveSlider(event) {
         if (event.pressure > 0.1) {
             let rect = track.getBoundingClientRect();
             let v = remap(event.clientY, rect.bottom, rect.top, 0, 1);
-            value = clamp(v, 0, 1);
+            valueOut = clamp(v, 0, 1);
         }
     }
 </script>
@@ -69,6 +70,6 @@
 
 <div class="base" on:pointermove="{moveSlider}" on:pointerout="{moveSlider}">
     <div class="track" bind:this={track}>
-        <div class="knob" style="top:{(1 - value) * 100}%;" />
+        <div class="knob" style="top:{(1 - valueIn) * 100}%;" />
     </div>
 </div>

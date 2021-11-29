@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "parcel frontend/index.html",
-    "start": "node server/index.js"
+    "start": "concurrently --restart-tries -1 --restart-after 500 \"parcel frontend/index.html\" \"node server/index.js\""
   },
   "repository": {
     "type": "git",
@@ -19,13 +19,14 @@
   },
   "homepage": "https://github.com/willstott101/lightpanel#readme",
   "dependencies": {
-    "autobahn": "^20.9.2",
-    "autobahn-browser": "^20.9.2",
+    "random-seed": "^0.3.0",
     "serialport": "^9.2.0",
     "simple-color-converter": "^2.1.13",
-    "svelte-icons": "^2.1.0"
+    "svelte-icons": "^2.1.0",
+    "ws": "8.3.0"
   },
   "devDependencies": {
+    "concurrently": "^6.4.0",
     "parcel": "^2.0.0",
     "parcel-transformer-svelte": "^1.1.2",
     "svelte": "^3.44.0"

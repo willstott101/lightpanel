@@ -1,6 +1,6 @@
 import { Executor } from "../engine/Executor.js";
 
-export const executor = new Executor(80);
+export const executor = new Executor();
 executor.addHorizontalScan(
     400, // Num LED pixels
     {x: 0, y: 0}, // Start pos

@@ -1,26 +1,30 @@
 import { horizontalScanPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/indexSnake.js";
 
+const DEFAULT_BRIGHTNESS = 0.75;
+
 export class Executor {
     pixelMap = [];
     data = new Uint8ClampedArray();
-    constructor(targetFps) {
+    constructor() {
         this.views = new Map();
         this._patch = defaultPattern;
         this._config = defaultPattern.config;
-        this._interval_ms = (1 / targetFps) * 1000;
         this._startTime = this._now();
         this._lastTime = this._startTime;
         this._stopTime = undefined;
-        this._maxBrightness = 0.75;
+        this._maxBrightness = DEFAULT_BRIGHTNESS;
         this._whiteBalance = 0
         this._whiteBalanceMultiplier = {
             r: 1,
             g: 1,
             b: 1
         }
+        this._on = true;
         this.width = 0;
         this.height = 0;
+        this._running = false;
+        this._listeners = new Set();
     }
 
     addView(name, view) {
@@ -37,10 +41,10 @@ export class Executor {
         const oldData = this.data;
         this.data = new Uint8ClampedArray(this.pixelMap.length * 3);
         this.data.set(oldData, 0);
-        this.refreshSize();
+        this._refreshSize();
     }
 
-    refreshSize() {
+    _refreshSize() {
         this.width = this.pixelMap.reduce((v, p) => {
             const m = p.x + p.width - 1;
             return m > v ? m : v;
@@ -51,18 +55,55 @@ export class Executor {
         }, 0);
     }
 
-    execute(time) {
-        if (this._maxBrightness > 0) {
-            if (time === undefined) {
-                time = (new Date()).getTime() / 1000;
-            }
-            const p = {
-                time: time,
-                random: Math.random(),
-                length: this.pixelMap.length,
-                width: this.width,
-                height: this.height,
-            };
+    addListener(listener) {
+        this._listeners.add(listener);
+    }
+    _fireChange(field) {
+        const msg = {
+            "type": "change",
+            "data": {
+                "field": field,
+                "value": this[field]
+            },
+        };
+        for (const listener of this._listeners)
+            listener(msg);
+    }
+    _fireExec(data) {
+        const msg = {
+            "type": "execute",
+            "data": data,
+        };
+        for (const listener of this._listeners)
+            listener(msg);
+    }
+
+    control(msg) {
+        if (msg.type === "execute") {
+            this._remoteControlled = true;
+            this.execute(msg.data);
+        } else if (msg.type === "change") {
+            this[msg.data.field] = msg.data.value;
+        } else if (msg.type === "start") {
+            this.start();
+        } else if (msg.type === "stop") {
+            this.stop();
+        }
+        // for (const listener of this._listeners)
+        //     listener(msg);
+    }
+
+    execute(p) {
+        if (this._maxBrightness > 0 && this._on) {
+            if (p.time === undefined) p.time = (new Date()).getTime() / 1000;
+            if (p.random === undefined) p.random = Math.random();
+            p.length = this.pixelMap.length;
+            p.width = this.width;
+            p.height = this.height;
+            this._fireExec({
+                time: p.time,
+                random: p.random,
+            });
             let g;
             if (this._patch.global)
                 g = this._patch.global(p, this._config);
@@ -82,7 +123,8 @@ export class Executor {
         } else {
             this._clear();
         }
-        this._lastTime = time;
+        this._lastTime = p.time;
+        for (const v of this.views.values()) v.render();
     }
 
     _clear() {
@@ -110,6 +152,23 @@ export class Executor {
 
     set maxBrightness(val) {
         this._maxBrightness = val;
+        this._fireChange("maxBrightness");
+        if (!this.running)
+            this._runOnce();
+    }
+
+    get on() {
+        return this._on;
+    }
+
+    set on(val) {
+        this._on = val;
+        this._fireChange("on");
+        if (this._maxBrightness === 0) {
+            this.maxBrightness = DEFAULT_BRIGHTNESS;
+        }
+        if (!this.running)
+            this._runOnce();
     }
 
     get whiteBalance() {
@@ -123,6 +182,18 @@ export class Executor {
             b: 255 / (255 - 255 * (val*0.04))
         }
         this._whiteBalance = val;
+        if (!this.running)
+            this._runOnce();
+        this._fireChange("whiteBalance");
+    }
+
+    get running() {
+        return this._running;
+    }
+
+    set running(val) {
+        this._running = val;
+        this._fireChange("running");
     }
 
     _now() {
@@ -145,14 +216,15 @@ export class Executor {
     }
 
     _doFrame() {
-        this.execute(this._now());
-        for (const v of this.views.values()) v.render();
+        this.execute({
+            time: this._now()
+        });
     }
 
     start() {
         this._resumeTime();
         if (typeof window === 'undefined') {
-            this._animReq = setInterval(this._doFrame.bind(this), this._interval_ms);
+            this._animReq = setInterval(this._doFrame.bind(this), (1 / 60) * 1000);
         } else {
             const onFrame = () => {
                 this._doFrame();
@@ -160,6 +232,8 @@ export class Executor {
             };
             this._animReq = requestAnimationFrame(onFrame);
         }
+        this.running = true;
+        this._fireChange("running");
     }
 
     stop() {
@@ -169,11 +243,17 @@ export class Executor {
         } else {
             cancelAnimationFrame(this._animReq);
         }
+        this.running = false;
+        this._fireChange("running");
+        this._runOnce();
     }
 
-    runOnce() {
+    _runOnce() {
+        if (this._remoteControlled) return; // The server will tell us when to render.
         const time = this._stopTime ? this._lastTime : this._now();
-        this.execute(time);
+        this.execute({
+            time: time
+        });
         for (const v of this.views.values()) v.render();
     }
 }
