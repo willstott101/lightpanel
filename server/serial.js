@@ -17,6 +17,7 @@ export class SerialView {
             });
             port.open(() => {
                 this.port = port;
+                console.log("SerialPort opened!");
             });
         } catch (e) {
             console.log("Error opening serial port");

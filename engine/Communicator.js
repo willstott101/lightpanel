@@ -6,7 +6,8 @@ export class Communicator {
 
     _connect() {
         // const url = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/ws`;
-        const url = `ws://localhost:8080/ws`;
+        const url = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.hostname}:8080/ws`;
+        // const url = `ws://localhost:8080/ws`;
 
         this._ws = new WebSocket(url);
 
