@@ -114,7 +114,8 @@ void defaultImage() {
     unsigned int yDataPixIdx = y * WIDTH;
     for (unsigned int x = 0; x < WIDTH; x++) {
       unsigned int dataPixIndex = yDataPixIdx + x;
-      leds.setPixel(dataToPixelMap[dataPixIndex], 0xAAAAAA);
+      // 240, 100, 25 - warm white
+      leds.setPixel(dataToPixelMap[dataPixIndex], 0xF06419);
     }
   }
 }

@@ -17,6 +17,10 @@ executor.addListener((msg) => {
 });
 
 wss.on('connection', function connection(ws) {
+  for (const m of executor.getSyncMessages())
+    ws.send(JSON.stringify(m));
+  executor.runOnce();
+
   ws.on('message', function message(msg) {
     executor.control(JSON.parse(msg));
   });

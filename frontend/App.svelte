@@ -8,8 +8,8 @@
     import { executor } from './globals';
     import { controller } from './globals';
 
-    let running = true;
-    let on = true;
+    let running = executor.running;
+    let on = executor.on;
     let brightnessDemand = executor.maxBrightness;
     let brightnessActual = brightnessDemand;
     let balanceDemand = executor.whiteBalance;
@@ -36,7 +36,7 @@
     }
 
     function toggleOff () {
-        controller.on = on;
+        controller.on = !on;
     }
 
     // but async... so binding is weird

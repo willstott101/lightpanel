@@ -1,5 +1,5 @@
 import { horizontalScanPixelMap } from "./layout.js";
-import defaultPattern from "../patterns/indexSnake.js";
+import defaultPattern from "../patterns/solid.js";
 
 const DEFAULT_BRIGHTNESS = 0.75;
 
@@ -25,6 +25,7 @@ export class Executor {
         this.height = 0;
         this._running = false;
         this._listeners = new Set();
+        this.remoteControlled = false;
     }
 
     addView(name, view) {
@@ -59,13 +60,7 @@ export class Executor {
         this._listeners.add(listener);
     }
     _fireChange(field) {
-        const msg = {
-            "type": "change",
-            "data": {
-                "field": field,
-                "value": this[field]
-            },
-        };
+        const msg = this._changeMsg(field);
         for (const listener of this._listeners)
             listener(msg);
     }
@@ -78,9 +73,18 @@ export class Executor {
             listener(msg);
     }
 
+    _changeMsg(field) {
+        return {
+            "type": "change",
+            "data": {
+                "field": field,
+                "value": this[field]
+            },
+        };
+    }
+
     control(msg) {
         if (msg.type === "execute") {
-            this._remoteControlled = true;
             this.execute(msg.data);
         } else if (msg.type === "change") {
             this[msg.data.field] = msg.data.value;
@@ -93,17 +97,21 @@ export class Executor {
         //     listener(msg);
     }
 
+    getSyncMessages() {
+        return [
+            this._changeMsg("on"),
+            this._changeMsg("running"),
+            this._changeMsg("maxBrightness"),
+            this._changeMsg("whiteBalance"),
+        ];
+    }
+
     execute(p) {
         if (this._maxBrightness > 0 && this._on) {
             if (p.time === undefined) p.time = (new Date()).getTime() / 1000;
-            if (p.random === undefined) p.random = Math.random();
             p.length = this.pixelMap.length;
             p.width = this.width;
             p.height = this.height;
-            this._fireExec({
-                time: p.time,
-                random: p.random,
-            });
             let g;
             if (this._patch.global)
                 g = this._patch.global(p, this._config);
@@ -123,6 +131,9 @@ export class Executor {
         } else {
             this._clear();
         }
+        this._fireExec({
+            time: p.time,
+        });
         this._lastTime = p.time;
         for (const v of this.views.values()) v.render();
     }
@@ -154,7 +165,7 @@ export class Executor {
         this._maxBrightness = val;
         this._fireChange("maxBrightness");
         if (!this.running)
-            this._runOnce();
+            this.runOnce();
     }
 
     get on() {
@@ -164,11 +175,11 @@ export class Executor {
     set on(val) {
         this._on = val;
         this._fireChange("on");
-        if (this._maxBrightness === 0) {
+        if (this._maxBrightness === 0 && val) {
             this.maxBrightness = DEFAULT_BRIGHTNESS;
         }
         if (!this.running)
-            this._runOnce();
+            this.runOnce();
     }
 
     get whiteBalance() {
@@ -183,7 +194,7 @@ export class Executor {
         }
         this._whiteBalance = val;
         if (!this.running)
-            this._runOnce();
+            this.runOnce();
         this._fireChange("whiteBalance");
     }
 
@@ -245,11 +256,11 @@ export class Executor {
         }
         this.running = false;
         this._fireChange("running");
-        this._runOnce();
+        this.runOnce();
     }
 
-    _runOnce() {
-        if (this._remoteControlled) return; // The server will tell us when to render.
+    runOnce() {
+        if (this.remoteControlled) return; // The server will tell us when to render.
         const time = this._stopTime ? this._lastTime : this._now();
         this.execute({
             time: time
