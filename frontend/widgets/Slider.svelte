@@ -6,7 +6,7 @@
     let track;
 
     function moveSlider(event) {
-        if (event.pressure > 0.1) {
+        if (event.buttons !== 0) {
             let rect = track.getBoundingClientRect();
             let v = remap(event.clientY, rect.bottom, rect.top, 0, 1);
             valueOut = clamp(v, 0, 1);
