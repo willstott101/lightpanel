@@ -1,5 +1,6 @@
 import { horizontalScanPixelMap } from "./layout.js";
 import defaultPattern from "../patterns/solid.js";
+import * as patterns from "../patterns/index.js";
 
 const DEFAULT_BRIGHTNESS = 0.75;
 
@@ -9,7 +10,8 @@ export class Executor {
     constructor() {
         this.views = new Map();
         this._patch = defaultPattern;
-        this._config = defaultPattern.config;
+        this._patchName = "solid";
+        this._config = patterns[this._patchName].config;
         this._startTime = this._now();
         this._lastTime = this._startTime;
         this._stopTime = undefined;
@@ -103,6 +105,7 @@ export class Executor {
             this._changeMsg("running"),
             this._changeMsg("maxBrightness"),
             this._changeMsg("whiteBalance"),
+            this._changeMsg("patchName"),
         ];
     }
 
@@ -115,12 +118,13 @@ export class Executor {
         };
         if (this._maxBrightness > 0 && this._on) {
             let g;
-            if (this._patch.global)
-                g = this._patch.global(p, this._config);
+            const patch = patterns[this._patchName];
+            if (patch.global)
+                g = patch.global(p, this._config);
             for (let i = 0; i < p.length; i++) {
                 p.pos = this.pixelMap[i];
                 p.index = i;
-                const color = this._patch.pixel(p, this._config, g);
+                const color = patch.pixel(p, this._config, g);
                 const j = i * 3;
                 this.data[j + 0] = color.r * this._whiteBalanceMultiplier.r;
                 this.data[j + 1] = color.g * this._whiteBalanceMultiplier.g;
@@ -203,9 +207,9 @@ export class Executor {
             b: 255 / (255 - 255 * (val*0.04))
         }
         this._whiteBalance = val;
+        this._fireChange("whiteBalance");
         if (!this.running)
             this.runOnce();
-        this._fireChange("whiteBalance");
     }
 
     get running() {
@@ -215,6 +219,18 @@ export class Executor {
     set running(val) {
         this._running = val;
         this._fireChange("running");
+    }
+
+    get patchName() {
+        return this._patchName;
+    }
+
+    set patchName(val) {
+        this._patchName = val;
+        this._config = patterns[this._patchName].config;
+        this._fireChange("patchName");
+        if (!this.running)
+            this.runOnce();
     }
 
     _now() {

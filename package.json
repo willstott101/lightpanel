@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "parcel frontend/index.html",
-    "start": "concurrently --restart-tries -1 --restart-after 500 \"parcel frontend/index.html\" \"node server/index.js\""
+    "start": "concurrently \"parcel frontend/index.html\" \"nodemon --exec 'node server/index.js'\""
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15",
     "parcel": "^2.0.0",
     "parcel-transformer-svelte": "^1.1.2",
     "svelte": "^3.44.0"

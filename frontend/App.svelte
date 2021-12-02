@@ -2,6 +2,7 @@
     import Visualization from "./Visualization.svelte";
     import Button from "./widgets/Button.svelte";
     import Slider from "./widgets/Slider.svelte";
+    import Selector from "./widgets/Selector.svelte";
     import MdPlay from "svelte-icons/md/MdPlayArrow.svelte";
     import MdStop from "svelte-icons/md/MdStop.svelte";
     import FaPowerOff from 'svelte-icons/fa/FaPowerOff.svelte'
@@ -14,6 +15,8 @@
     let brightnessActual = brightnessDemand;
     let balanceDemand = executor.whiteBalance;
     let balanceActual = balanceDemand;
+    let patchDemand = executor.patchName;
+    let patchActual = patchDemand;
     executor.addListener((msg) => {
         if (msg.type === "change") {
             if (msg.data.field === "maxBrightness") {
@@ -42,6 +45,7 @@
     // but async... so binding is weird
     $: controller.maxBrightness = brightnessDemand;
     $: controller.whiteBalance = balanceDemand;
+    $: controller.patchName = patchDemand;
 </script>
 
 <style>
@@ -111,4 +115,5 @@
             <Slider bind:valueIn={balanceActual} bind:valueOut={balanceDemand}/>
         </div>
     </div>
+    <Selector bind:valueIn={patchActual} bind:valueOut={patchDemand}/>
 </div>

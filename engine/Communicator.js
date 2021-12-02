@@ -68,6 +68,21 @@ export class Communicator {
         }));
     }
 
+    get patchName() {
+        throw "Woah there space cowboy."
+    }
+
+    set patchName(val) {
+        if (this._ws.readyState !== 1) return;
+        this._ws.send(JSON.stringify({
+            type: "change",
+            data: {
+                field: "patchName",
+                value: val
+            },
+        }));
+    }
+
     start() {
         if (this._ws.readyState !== 1) return;
         this._ws.send(JSON.stringify({
