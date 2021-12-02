@@ -8,21 +8,15 @@ export class SerialView {
     constructor(executor) {
         this.executor = executor;
         this.port = undefined;
-    }
-
-    _open() {
-        try {
-            const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
-              baudRate: 115200
-            });
-            port.open(() => {
-                this.port = port;
-                console.log("SerialPort opened!");
-            });
-        } catch (e) {
-            console.log("Error opening serial port");
-            setTimeout(this._open, 500);
-        }
+        const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
+          baudRate: 115200
+        }, () => {
+            this.port = port;
+            console.log("SerialPort opened!");
+        });
+        port.on('error', (err) => {
+          console.log('Error: ', err.message)
+        });
     }
 
     render() {

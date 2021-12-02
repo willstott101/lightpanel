@@ -66,7 +66,7 @@ export class Executor {
     }
     _fireExec(data) {
         const msg = {
-            "type": "execute",
+            "type": "exec",
             "data": data,
         };
         for (const listener of this._listeners)
@@ -84,7 +84,7 @@ export class Executor {
     }
 
     control(msg) {
-        if (msg.type === "execute") {
+        if (msg.type === "exec") {
             this.execute(msg.data);
         } else if (msg.type === "change") {
             this[msg.data.field] = msg.data.value;
@@ -106,12 +106,14 @@ export class Executor {
         ];
     }
 
-    execute(p) {
+    execute(time) {
+        const p = {
+            time: time || (new Date()).getTime() / 1000,
+            length: this.pixelMap.length,
+            width: this.width,
+            height: this.height,
+        };
         if (this._maxBrightness > 0 && this._on) {
-            if (p.time === undefined) p.time = (new Date()).getTime() / 1000;
-            p.length = this.pixelMap.length;
-            p.width = this.width;
-            p.height = this.height;
             let g;
             if (this._patch.global)
                 g = this._patch.global(p, this._config);
@@ -131,9 +133,7 @@ export class Executor {
         } else {
             this._clear();
         }
-        this._fireExec({
-            time: p.time,
-        });
+        this._fireExec(Math.round(p.time * 1000) / 1000);
         this._lastTime = p.time;
         for (const v of this.views.values()) v.render();
     }
@@ -227,15 +227,13 @@ export class Executor {
     }
 
     _doFrame() {
-        this.execute({
-            time: this._now()
-        });
+        this.execute(this._now());
     }
 
     start() {
         this._resumeTime();
         if (typeof window === 'undefined') {
-            this._animReq = setInterval(this._doFrame.bind(this), (1 / 60) * 1000);
+            this._animReq = setInterval(this._doFrame.bind(this), (1 / 45) * 1000);
         } else {
             const onFrame = () => {
                 this._doFrame();
@@ -262,9 +260,7 @@ export class Executor {
     runOnce() {
         if (this.remoteControlled) return; // The server will tell us when to render.
         const time = this._stopTime ? this._lastTime : this._now();
-        this.execute({
-            time: time
-        });
+        this.execute(time);
         for (const v of this.views.values()) v.render();
     }
 }
