@@ -127,8 +127,8 @@ export class Executor {
                 this.data[j + 2] = color.b * this._whiteBalanceMultiplier.b;
             }
 
-            if (this._maxBrightness < 1) {
-                this._reduceBrightness();
+            if (this._maxBrightness !== 1) {
+                this._scaleBrightness();
             }
         } else {
             this._clear();
@@ -143,7 +143,7 @@ export class Executor {
             this.data[i] = 0;
     }
 
-    _reduceBrightness() {
+    _clampBrightness() {
         const max = this._maxBrightness * 255 * 3;
         for (let p = 0; p <= this.pixelMap.length; p++) {
             const i = p * 3;
@@ -154,6 +154,16 @@ export class Executor {
                 this.data[i + 1] *= scale;
                 this.data[i + 2] *= scale;
             }
+        }
+    }
+
+    _scaleBrightness() {
+        const scale = this._maxBrightness;
+        for (let p = 0; p <= this.pixelMap.length; p++) {
+            const i = p * 3;
+            this.data[i] *= scale;
+            this.data[i + 1] *= scale;
+            this.data[i + 2] *= scale;
         }
     }
 
