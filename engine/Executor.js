@@ -142,6 +142,20 @@ export class Executor {
         for (const v of this.views.values()) v.render();
     }
 
+    postProcess(fn) {
+        const p = {
+            length: this.pixelMap.length,
+            width: this.width,
+            height: this.height,
+        };
+        for (let i = 0; i < p.length; i++) {
+            p.pos = this.pixelMap[i];
+            p.index = i;
+            const j = i * 3;
+            fn(p, j, this.data);
+        }
+    }
+
     _clear() {
         for (let i = 0; i <= this.data.length; i++)
             this.data[i] = 0;

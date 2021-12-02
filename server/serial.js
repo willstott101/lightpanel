@@ -21,6 +21,14 @@ export class SerialView {
 
     render() {
         // let timeMs = (new Date()).getTime();
+
+        this.executor.postProcess((p, j, data) => {
+            if (p.pos.y === 20 || p.pos.y === 17 || p.pos.y === 16 || p.pos.y === 21 && p.pos.x > 40) {
+                data[j] *= 1.8;
+                data[j + 1] *= 1.8;
+                data[j + 2] *= 1.8;
+            }
+        });
         
         let buf = Buffer.from(this.executor.data.buffer);
         // buf = encode(buf, {
