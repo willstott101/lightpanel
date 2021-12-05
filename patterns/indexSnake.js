@@ -1,21 +1,14 @@
 import { lerpRGBasYUV, lerpRGB } from "../engine/color.js";
 import { quantize } from "../engine/math.js";
+import { warmWhite, black } from "../engine/swatches.js";
 
 export default {
     config: {
         period: 100,
-        trail: 6,
-        count: 20,
-        primaryColor: {
-            r: 255,
-            g: 10,
-            b: 10,
-        },
-        secondaryColor: {
-            r: 0,
-            g: 128,
-            b: 128,
-        },
+        trail: 10,
+        count: 48,
+        primaryColor: warmWhite,
+        secondaryColor: black,
     },
     global: (p, c) => {
         const indices = [];

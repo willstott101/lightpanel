@@ -3,3 +3,9 @@ export const warmWhite = {
     g: 100,
     b: 25,
 };
+
+export const black = {
+    r: 0,
+    g: 0,
+    b: 0,
+};

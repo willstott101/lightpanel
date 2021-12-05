@@ -8,8 +8,9 @@ export class Executor {
     data = new Uint8ClampedArray();
     constructor() {
         this.views = new Map();
-        this._patchName = "solid";
+        this._patchName = "dvd";
         this._config = patterns[this._patchName].config;
+        this._state = {};
         this._startTime = this._now();
         this._lastTime = this._startTime;
         this._stopTime = undefined;
@@ -121,11 +122,12 @@ export class Executor {
             pixelWidth: this.pixelWidth,
             pixelHeight: this.pixelHeight,
         };
+        p.deltaTime = p.time - this._lastTime;
         if (this._maxBrightness > 0 && this._on) {
             let g;
             const patch = patterns[this._patchName];
             if (patch.global)
-                g = patch.global(p, this._config);
+                g = patch.global(p, this._config, this._state);
             for (let i = 0; i < p.length; i++) {
                 p.pos = this.pixelMap[i];
                 p.index = i;
@@ -249,6 +251,7 @@ export class Executor {
     set patchName(val) {
         this._patchName = val;
         this._config = patterns[this._patchName].config;
+        this._state = {};
         this._fireChange("patchName");
         if (!this.running)
             this.runOnce();
@@ -308,6 +311,5 @@ export class Executor {
         if (this.remoteControlled) return; // The server will tell us when to render.
         const time = this._stopTime ? this._lastTime : this._now();
         this.execute(time);
-        for (const v of this.views.values()) v.render();
     }
 }
