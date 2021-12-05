@@ -1,4 +1,4 @@
-import { lerpRGBasYUV, lerpRGB } from "../engine/color.js";
+import { lerpRGB } from "../engine/color.js";
 import { quantize } from "../engine/math.js";
 import { warmWhite, black } from "../engine/swatches.js";
 
@@ -33,8 +33,6 @@ export default {
             return pos;
         });
         const pos = Math.min(...potentialPositions);
-
-        // return lerpRGBasYUV(c.primaryColor, c.secondaryColor, pos);
         return lerpRGB(c.primaryColor, c.secondaryColor, pos);
     }
 };

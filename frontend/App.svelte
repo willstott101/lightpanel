@@ -27,6 +27,8 @@
                 balanceActual = msg.data.value;
             } else if (msg.data.field === "running") {
                 running = msg.data.value;
+            } else if (msg.data.field === "patchName") {
+                patchActual = msg.data.value;
             }
         }
     });
@@ -106,14 +108,14 @@
         ">
             <Slider bind:valueIn={brightnessActual} bind:valueOut={brightnessDemand}/>
         </div>
-        <div style="
+        <!-- <div style="
             grid-column-start: 4;
             grid-column-end: 4;
             grid-row-start: 1;
             grid-row-end: 3;
         ">
             <Slider bind:valueIn={balanceActual} bind:valueOut={balanceDemand}/>
-        </div>
+        </div> -->
         <div style="
             grid-column-start: 1;
             grid-column-end: 1;

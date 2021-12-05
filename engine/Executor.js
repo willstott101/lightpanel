@@ -1,5 +1,5 @@
 import { horizontalScanPixelMap } from "./layout.js";
-import * as patterns from "../patterns/index.js";
+import patterns from "../patterns/index.js";
 
 const DEFAULT_BRIGHTNESS = 0.75;
 
@@ -8,7 +8,7 @@ export class Executor {
     data = new Uint8ClampedArray();
     constructor() {
         this.views = new Map();
-        this._patchName = "dvd";
+        this._patchName = "Noise";
         this._config = patterns[this._patchName].config;
         this._state = {};
         this._startTime = this._now();
