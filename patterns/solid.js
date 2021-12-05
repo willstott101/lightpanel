@@ -1,13 +1,8 @@
-import { lerpRGB } from "../engine/color.js";
-import { remap } from "../engine/math.js";
+import { warmWhite } from "../engine/swatches.js";
 
 export default {
     config: {
-        primaryColor: {
-            r: 240,
-            g: 100,
-            b: 25,
-        },
+        primaryColor: warmWhite,
     },
     pixel: (p, c, g) => {
         return c.primaryColor;
