@@ -20,7 +20,7 @@
     executor.addListener((msg) => {
         if (msg.type === "change") {
             if (msg.data.field === "maxBrightness") {
-                brightnessActual = msg.data.value;
+                brightnessActual = Math.sqrt(msg.data.value);
             } else if (msg.data.field === "on") {
                 on = msg.data.value;
             } else if (msg.data.field === "whiteBalance") {
@@ -43,7 +43,7 @@
     }
 
     // but async... so binding is weird
-    $: controller.maxBrightness = brightnessDemand;
+    $: controller.maxBrightness = Math.pow(brightnessDemand, 2);
     $: controller.whiteBalance = balanceDemand;
     $: controller.patchName = patchDemand;
 </script>
@@ -60,7 +60,7 @@
     .grid {
         display: inline-grid;
         grid-template-columns: auto 6em 6em 6em;
-        grid-template-rows: 6em 6em;
+        grid-template-rows: 6em 6em 6em 6em;
     }
 </style>
 
@@ -114,6 +114,13 @@
         ">
             <Slider bind:valueIn={balanceActual} bind:valueOut={balanceDemand}/>
         </div>
+        <div style="
+            grid-column-start: 1;
+            grid-column-end: 1;
+            grid-row-start: 3;
+            grid-row-end: 3;
+        ">
+            <Selector bind:valueIn={patchActual} bind:valueOut={patchDemand}/>
+        </div>
     </div>
-    <Selector bind:valueIn={patchActual} bind:valueOut={patchDemand}/>
 </div>

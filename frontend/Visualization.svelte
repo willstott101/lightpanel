@@ -9,6 +9,7 @@
         flex-direction: column;
         align-items: center;
         height: 100%;
+        transform: rotate(180deg);
     }
 </style>
 
