@@ -1,5 +1,4 @@
 import { horizontalScanPixelMap } from "./layout.js";
-import defaultPattern from "../patterns/solid.js";
 import * as patterns from "../patterns/index.js";
 
 const DEFAULT_BRIGHTNESS = 0.75;
@@ -9,7 +8,6 @@ export class Executor {
     data = new Uint8ClampedArray();
     constructor() {
         this.views = new Map();
-        this._patch = defaultPattern;
         this._patchName = "solid";
         this._config = patterns[this._patchName].config;
         this._startTime = this._now();
@@ -25,6 +23,8 @@ export class Executor {
         this._on = true;
         this.width = 0;
         this.height = 0;
+        this.pixelWidth = 0;
+        this.pixelHeight = 0;
         this._running = false;
         this._listeners = new Set();
         this.remoteControlled = false;
@@ -52,10 +52,13 @@ export class Executor {
             const m = p.x + p.width - 1;
             return m > v ? m : v;
         }, 0);
+        // TODO: QDH here
+        this.pixelWidth = this.width / 3;
         this.height = this.pixelMap.reduce((v, p) => {
             const m = p.y + p.height - 1;
             return m > v ? m : v;
         }, 0);
+        this.pixelHeight = this.height;
     }
 
     addListener(listener) {
@@ -115,6 +118,8 @@ export class Executor {
             length: this.pixelMap.length,
             width: this.width,
             height: this.height,
+            pixelWidth: this.pixelWidth,
+            pixelHeight: this.pixelHeight,
         };
         if (this._maxBrightness > 0 && this._on) {
             let g;
@@ -147,6 +152,8 @@ export class Executor {
             length: this.pixelMap.length,
             width: this.width,
             height: this.height,
+            pixelWidth: this.pixelWidth,
+            pixelHeight: this.pixelHeight,
         };
         for (let i = 0; i < p.length; i++) {
             p.pos = this.pixelMap[i];

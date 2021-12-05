@@ -1,5 +1,5 @@
 import simpleColorConverter from 'simple-color-converter';
-import { lerp } from "./math.js";
+import { lerp, remap } from "./math.js";
 
 export function rgb2yuv(c) {
     return new simpleColorConverter({
@@ -60,4 +60,27 @@ export function lerpRGBasYUV(ac, bc, t) {
 
 export function lerpRGBasCMYK(ac, bc, t) {
     return cmyk2rgb(lerpCMYK(rgb2cmyk(ac), rgb2cmyk(bc), t));
+}
+
+export function grad(stops, pos) {
+    if (pos <= stops[0])
+        return stops[1];
+    pos -= stops[0];
+    if (pos >= stops[stops.length - 2])
+        return stops[stops.length - 1];
+    let idx = 0;
+    const stopDist = () => stops[idx * 2 + 2] - stops[idx * 2];
+    while (pos > stopDist()) {
+        pos -= stopDist();
+        idx++;
+    }
+    const p = remap(pos, 0, stopDist(), 0, 1);
+    return lerpRGB(stops[idx * 2 + 1], stops[idx * 2 + 3], p);
+}
+
+export function hex(h) {
+    return new simpleColorConverter({
+        hex6: h,
+        to: 'rgb'
+    }).color;
 }
