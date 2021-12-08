@@ -1,5 +1,6 @@
 import { horizontalScanPixelMap } from "./layout.js";
 import patterns from "../patterns/index.js";
+import * as allPalettes from "../engine/palettes.js";
 
 const DEFAULT_BRIGHTNESS = 0.75;
 
@@ -8,9 +9,6 @@ export class Executor {
     data = new Uint8ClampedArray();
     constructor() {
         this.views = new Map();
-        this._patchName = "Noise";
-        this._config = patterns[this._patchName].config;
-        this._state = {};
         this._startTime = this._now();
         this._lastTime = this._startTime;
         this._stopTime = undefined;
@@ -29,6 +27,7 @@ export class Executor {
         this._running = false;
         this._listeners = new Set();
         this.remoteControlled = false;
+        this.patchName = "Striped";
     }
 
     addView(name, view) {
@@ -121,6 +120,7 @@ export class Executor {
             height: this.height,
             pixelWidth: this.pixelWidth,
             pixelHeight: this.pixelHeight,
+            palette: this._palette,
         };
         p.deltaTime = p.time - this._lastTime;
         if (this._maxBrightness > 0 && this._on) {
@@ -250,7 +250,12 @@ export class Executor {
 
     set patchName(val) {
         this._patchName = val;
-        this._config = patterns[this._patchName].config;
+        const pattern = patterns[this._patchName];
+        const paletteType = pattern.paletteType || "pair";
+        this.palettes = allPalettes[paletteType];
+        const paletteName = pattern.palette || this.palettes.__default;
+        this._palette = this.palettes[paletteName];
+        this._config = pattern.config;
         this._state = {};
         this._fireChange("patchName");
         if (!this.running)

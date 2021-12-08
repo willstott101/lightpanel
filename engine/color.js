@@ -62,6 +62,13 @@ export function lerpRGBasCMYK(ac, bc, t) {
     return cmyk2rgb(lerpCMYK(rgb2cmyk(ac), rgb2cmyk(bc), t));
 }
 
+export function evenGrad(stops, pos) {
+    return grad(stops.reduce((p, c, i) => {
+        p.push(i / (stops.length - 1), c);
+        return p;
+    }, []), pos);
+}
+
 export function grad(stops, pos) {
     if (pos <= stops[0])
         return stops[1];

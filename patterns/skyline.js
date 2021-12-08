@@ -1,28 +1,11 @@
-import { lerpRGB, grad, hex } from "../engine/color.js";
+import { grad } from "../engine/color.js";
 import { remap } from "../engine/math.js";
 import gen from "random-seed";
 
 export default {
+    paletteType: "sky",
     config: {
         period: 5,
-        // skyColor: {
-        //     r: 70,
-        //     g: 50,
-        //     b: 250,
-        // },
-        // midColor: {
-        //     r: 150,
-        //     g: 100,
-        //     b: 100,
-        // },
-        // horizonColor: {
-        //     r: 255,
-        //     g: 40,
-        //     b: 10,
-        // },
-        skyColor: hex('#AA11FF'),
-        midColor: hex('#8877FF'),
-        horizonColor: hex('#FF1900'),
         buildingColor: {
             r: 0,
             g: 0,
@@ -44,6 +27,6 @@ export default {
             return c.buildingColor;
         }
         const pos = remap(p.pos.y, 0, p.height, 0, 1);
-        return grad([0.35, c.horizonColor, 0.9, c.midColor, 1, c.skyColor], pos);
+        return grad([0.35, p.palette[2], 0.9, p.palette[1], 1, p.palette[0]], pos);
     }
 };

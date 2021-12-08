@@ -1,14 +1,13 @@
 import { lerpRGB } from "../engine/color.js";
 import { quantize } from "../engine/math.js";
-import { warmWhite, black } from "../engine/swatches.js";
 
 export default {
+    paletteType: "pair",
+    palette: "Warm",
     config: {
         period: 100,
         trail: 10,
         count: 48,
-        primaryColor: warmWhite,
-        secondaryColor: black,
     },
     global: (p, c) => {
         const indices = [];
@@ -33,6 +32,6 @@ export default {
             return pos;
         });
         const pos = Math.min(...potentialPositions);
-        return lerpRGB(c.primaryColor, c.secondaryColor, pos);
+        return lerpRGB(p.palette.on, p.palette.off, pos);
     }
 };

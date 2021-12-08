@@ -1,7 +1,7 @@
-import { lerpRGBasYUV, lerpRGB } from "../engine/color.js";
-import { quantize } from "../engine/math.js";
+import { lerpRGB } from "../engine/color.js";
 
 export default {
+    paletteType: "pair",
     config: {
         speed: 20,
         scale: 10,
@@ -23,7 +23,6 @@ export default {
         if (maths > p.pos.y - c.thickness && maths < p.pos.y + c.thickness) {
             pos = 0.5
         }
-
-        return lerpRGB(c.primaryColor, c.secondaryColor, pos);
+        return lerpRGB(p.palette.on, p.palette.off, pos);
     }
 };

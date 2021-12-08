@@ -1,11 +1,11 @@
-import { lerpRGB, hex } from "../engine/color.js";
+import { lerpRGB } from "../engine/color.js";
 import { remap } from "../engine/math.js";
 
 export default {
+    paletteType: "pair",
+    palette: "Matrix",
     config: {
         trail: 20,
-        letter: hex('#00AA00'),
-        bgColor: hex('#000000'),
     },
     global: (p, c, s) => {
         const DENSITY = 0.015;
@@ -46,6 +46,6 @@ export default {
         }
         if (pos > 1)
             return c.letter;
-        return lerpRGB(c.bgColor, c.letter, pos);
+        return lerpRGB(p.palette.on, p.palette.off, 1 - pos);
     }
 };

@@ -1,10 +1,6 @@
-import { warmWhite } from "../engine/swatches.js";
-
 export default {
-    config: {
-        primaryColor: warmWhite,
-    },
+    paletteType: "light",
     pixel: (p, c, g) => {
-        return c.primaryColor;
+        return p.palette.on;
     }
 };

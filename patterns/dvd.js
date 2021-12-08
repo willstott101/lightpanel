@@ -1,17 +1,12 @@
 import { lerpRGB } from "../engine/color.js";
 import { remap } from "../engine/math.js";
-import { warmWhite } from "../engine/swatches.js";
 
 export default {
+    paletteType: "pair",
+    palette: "Psych",
     config: {
         height: 5,
         width: 5,
-        puckColor: {
-            r: 0,
-            g: 0,
-            b: 0,
-        },
-        bgColor: warmWhite,
     },
     global: (p, c, s) => {
         const MAX_SPEED = 7;
@@ -29,14 +24,22 @@ export default {
         } else {
             s.pos.x += s.vel.x * p.deltaTime;
             s.pos.y += s.vel.y * p.deltaTime;
-            if (s.pos.x >= p.width - c.width * 0.75)
+            if (s.pos.x >= p.width - c.width * 0.75) {
                 s.vel.x = speed() * -1;
-            if (s.pos.x <= c.width * 0.75)
+                s.pos.x = p.width - c.width * 0.75;
+            }
+            if (s.pos.x <= c.width * 0.75) {
                 s.vel.x = speed();
-            if (s.pos.y >= p.height - c.width * 0.5)
+                s.pos.x = c.width * 0.75;
+            }
+            if (s.pos.y >= p.height - c.width * 0.5) {
                 s.vel.y = speed() * -1;
-            if (s.pos.y <= c.width * 0.75)
+                s.pos.y = p.height - c.width * 0.5;
+            }
+            if (s.pos.y <= c.width * 0.75) {
                 s.vel.y = speed();
+                s.pos.y = c.width * 0.75;
+            }
         }
         return {
             pos: s.pos,
@@ -65,6 +68,6 @@ export default {
             }
         }
         pos /= (8 * 8);
-        return lerpRGB(c.bgColor, c.puckColor, pos);
+        return lerpRGB(p.palette.off, p.palette.on, pos);
     }
 };
