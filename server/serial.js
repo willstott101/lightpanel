@@ -2,8 +2,29 @@ import SerialPort from 'serialport';
 // import { encode } from 'node-libpng';
 import { Buffer } from 'buffer';
 import { GammaLookUp } from '../engine/gamma.js';
+import { keyframes } from '../engine/math.js';
 
 const SEP = "SEPERATING TEXT";
+
+const QDH_FIX_LEDS_R = [
+    0, 0,
+    100, 118,
+    200, 255,
+];
+
+const QDH_FIX_LEDS_G = [
+    0, 0,
+    100, 125,
+    200, 255,
+];
+
+const QDH_FIX_LEDS_B = [
+    0, 0,
+    20, 0,
+    50, 70,
+    100, 118,
+    180, 255,
+];
 
 export class SerialView {
     constructor(executor) {
@@ -25,9 +46,9 @@ export class SerialView {
 
         this.executor.postProcess((p, j, data) => {
             if (p.pos.y === 20 || p.pos.y === 17 || p.pos.y === 16 || p.pos.y === 21 && p.pos.x > 40) {
-                data[j] *= 1.8;
-                data[j + 1] *= 1.8;
-                data[j + 2] *= 1.8;
+                data[j + 0] = keyframes(QDH_FIX_LEDS_R, data[j + 0]);
+                data[j + 1] = keyframes(QDH_FIX_LEDS_G, data[j + 1]);
+                data[j + 2] = keyframes(QDH_FIX_LEDS_B, data[j + 2]);
             }
             data[j + 0] = GammaLookUp[data[j + 0]];
             data[j + 1] = GammaLookUp[data[j + 1]];
