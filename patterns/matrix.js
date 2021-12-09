@@ -9,7 +9,7 @@ export default {
     },
     global: (p, c, s) => {
         const DENSITY = 0.015;
-        const MIN_SPEED = 0.1;
+        const MIN_SPEED = 0.02;
         const MAX_SPEED = 2;
         const MIN_BRIGHTNESS = 0.1;
         if (!s.vals) s.vals = [];
