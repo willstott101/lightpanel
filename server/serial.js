@@ -1,6 +1,7 @@
 import SerialPort from 'serialport';
 // import { encode } from 'node-libpng';
 import { Buffer } from 'buffer';
+import { GammaLookUp } from '../engine/gamma.js';
 
 const SEP = "SEPERATING TEXT";
 
@@ -28,6 +29,9 @@ export class SerialView {
                 data[j + 1] *= 1.8;
                 data[j + 2] *= 1.8;
             }
+            data[j + 0] = GammaLookUp[data[j + 0]];
+            data[j + 1] = GammaLookUp[data[j + 1]];
+            data[j + 2] = GammaLookUp[data[j + 2]];
         });
         
         let buf = Buffer.from(this.executor.data.buffer);

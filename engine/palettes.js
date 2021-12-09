@@ -1,10 +1,15 @@
-import { hex } from "../engine/color.js";
+import { hex } from "./color.js";
+import { kelvin2RGB } from "./kelvin.js";
 
 export const light = {
     __default: "Warm",
     Warm: {
         off: hex("#000000"),
-        on: hex("#f06416"),
+        on: kelvin2RGB[2900],
+    },
+    Daylight: {
+        off: hex("#000000"),
+        on: kelvin2RGB[5000],
     },
     Bright: {
         off: hex("#000000"),
