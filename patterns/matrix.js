@@ -28,7 +28,7 @@ export default {
                     pos: p.pixelHeight,
                     vel: remap(Math.pow(r, 4), 0, 1, MIN_SPEED, MAX_SPEED),
                     brightness: remap(Math.pow(r, 2), 0, 1, MIN_BRIGHTNESS, 1),
-                    trail: remap(r, 0, 1, c.trail, 2),
+                    trail: remap(r, 0, 1, 2, c.trail),
                 });
             }
         }
@@ -46,6 +46,6 @@ export default {
         }
         if (pos > 1)
             return c.letter;
-        return lerpRGB(p.palette.on, p.palette.off, 1 - pos);
+        return lerpRGB(p.palette.off, p.palette.on, remap(pos, 0, 1, 0.15, 1));
     }
 };
