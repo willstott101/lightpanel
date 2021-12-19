@@ -83,6 +83,21 @@ export class Communicator {
         }));
     }
 
+    get paletteName() {
+        throw "Woah there space cowboy."
+    }
+
+    set paletteName(val) {
+        if (this._ws.readyState !== 1) return;
+        this._ws.send(JSON.stringify({
+            type: "change",
+            data: {
+                field: "paletteName",
+                value: val
+            },
+        }));
+    }
+
     start() {
         if (this._ws.readyState !== 1) return;
         this._ws.send(JSON.stringify({

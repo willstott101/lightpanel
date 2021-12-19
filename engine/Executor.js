@@ -109,6 +109,7 @@ export class Executor {
             this._changeMsg("maxBrightness"),
             this._changeMsg("whiteBalance"),
             this._changeMsg("patchName"),
+            this._changeMsg("paletteName"),
         ];
     }
 
@@ -253,11 +254,20 @@ export class Executor {
         const pattern = patterns[this._patchName];
         const paletteType = pattern.paletteType || "pair";
         this.palettes = allPalettes[paletteType];
-        const paletteName = pattern.palette || this.palettes.__default;
-        this._palette = this.palettes[paletteName];
         this._config = pattern.config;
         this._state = {};
         this._fireChange("patchName");
+        this.paletteName = pattern.palette || this.palettes.__default;
+    }
+
+    get paletteName() {
+        return this._paletteName;
+    }
+
+    set paletteName(val) {
+        this._paletteName = val;;
+        this._palette = this.palettes[this._paletteName];
+        this._fireChange("paletteName");
         if (!this.running)
             this.runOnce();
     }

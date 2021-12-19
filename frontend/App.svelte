@@ -1,5 +1,6 @@
 <script>
     import Visualization from "./Visualization.svelte";
+    import Color from "./widgets/Color.svelte";
     import Button from "./widgets/Button.svelte";
     import Slider from "./widgets/Slider.svelte";
     import Selector from "./widgets/Selector.svelte";
@@ -17,6 +18,8 @@
     let balanceActual = balanceDemand;
     let patchDemand = executor.patchName;
     let patchActual = patchDemand;
+    let paletteDemand = executor.paletteName;
+    let paletteActual = paletteDemand;
     executor.addListener((msg) => {
         if (msg.type === "change") {
             if (msg.data.field === "maxBrightness") {
@@ -29,6 +32,8 @@
                 running = msg.data.value;
             } else if (msg.data.field === "patchName") {
                 patchActual = msg.data.value;
+            } else if (msg.data.field === "paletteName") {
+                paletteActual = msg.data.value;
             }
         }
     });
@@ -48,6 +53,7 @@
     $: controller.maxBrightness = Math.pow(brightnessDemand, 2);
     $: controller.whiteBalance = balanceDemand;
     $: controller.patchName = patchDemand;
+    $: controller.paletteName = paletteDemand;
 </script>
 
 <style>
@@ -123,6 +129,14 @@
             grid-row-end: 3;
         ">
             <Selector bind:valueIn={patchActual} bind:valueOut={patchDemand}/>
+        </div>
+        <div style="
+            grid-column-start: 2;
+            grid-column-end: 2;
+            grid-row-start: 3;
+            grid-row-end: 3;
+        ">
+            <Color bind:valueIn={paletteActual} bind:valueOut={paletteDemand}/>
         </div>
     </div>
 </div>
