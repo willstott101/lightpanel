@@ -4,12 +4,13 @@
 
 <style>
     .root {
-        background-color: #353535;
+        background-color: black;
         display: flex;
         flex-direction: column;
         align-items: center;
         height: 100%;
         transform: rotate(180deg);
+        border-radius:  3px;
     }
 </style>
 
