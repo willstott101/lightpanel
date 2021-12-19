@@ -1,10 +1,10 @@
 import SerialPort from 'serialport';
-// import { encode } from 'node-libpng';
 import { Buffer } from 'buffer';
 import { GammaLookUp } from '../engine/gamma.js';
 import { keyframes } from '../engine/math.js';
 
-const SEP = "SEPERATING TEXT";
+const SEP1 = "img start";
+const SEP2 = "img end";
 
 const QDH_FIX_LEDS_R = [
     0, 0,
@@ -42,8 +42,7 @@ export class SerialView {
     }
 
     render() {
-        // let timeMs = (new Date()).getTime();
-
+        // console.log("============================");
         this.executor.postProcess((p, j, data) => {
             if (p.pos.y === 20 || p.pos.y === 17 || p.pos.y === 16 || p.pos.y === 21 && p.pos.x > 40) {
                 data[j + 0] = keyframes(QDH_FIX_LEDS_R, data[j + 0]);
@@ -53,21 +52,17 @@ export class SerialView {
             data[j + 0] = GammaLookUp[data[j + 0]];
             data[j + 1] = GammaLookUp[data[j + 1]];
             data[j + 2] = GammaLookUp[data[j + 2]];
+
+            // console.log((data[j + 0] << 16) + (data[j + 1] << 0) + (data[j + 2] << 8));
         });
         
         let buf = Buffer.from(this.executor.data.buffer);
-        // buf = encode(buf, {
-        //     width: this.executor.width,
-        //     height: this.executor.height,
-        //     compressionLevel: 9,
-        // });
 
         if (this.port) {
+            this.port.write(SEP1);
             this.port.write(buf);
-            this.port.write(SEP);
+            this.port.write(SEP2);
         }
-        // let timeMsEnd = (new Date()).getTime();
-        // console.log("frame of size", buf.length, "bytes encoded in", timeMsEnd - timeMs, "milliseconds");
     }
 }
 
