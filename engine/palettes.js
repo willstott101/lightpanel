@@ -19,6 +19,10 @@ export const light = {
         off: hex("#000000"),
         on: hex("#00AA00"),
     },
+    Pink: {
+        off: hex("#000000"),
+        on: hex("#FF8888"),
+    },
 };
 
 export const pair = {
@@ -88,6 +92,8 @@ export const sky = {
 export const gradient = {
     ...sky,
     __default: "Morning",
+    Secondary: palette["Secondary"],
+    Tertiary: palette["Tertiary"],
     "Pastel Rainbow": palette["Pastel Rainbow"],
     Psych: [pair.Psych.on, pair.Psych.off],
 };
