@@ -7,6 +7,7 @@ import dvd from "../patterns/dvd.js";
 import stripes from "../patterns/stripes.js";
 import matrix from "../patterns/matrix.js";
 import noise from "../patterns/noise.js";
+import hueRotate from "../patterns/hueRotate.js";
 
 export default {
     "Matrix": matrix,
@@ -18,4 +19,5 @@ export default {
     "Striped": stripes,
     "Gradient": gradient,
     "Solid": solid,
+    "Hue Rotate": hueRotate,
 };

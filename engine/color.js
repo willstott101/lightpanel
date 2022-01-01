@@ -79,3 +79,12 @@ export function hex(h) {
         to: 'rgb'
     }).color;
 }
+
+export function hsl(h, s, l) {
+    return new simpleColorConverter({
+        hsl: {
+            h, s, l,
+        },
+        to: 'rgb'
+    }).color;
+}
