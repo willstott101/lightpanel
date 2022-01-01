@@ -1,7 +1,7 @@
 export function styleStringFromPalette(palette) {
     if (!palette)
         return "background: black;";
-    console.log("palette", palette);
+    // console.log("palette", palette);
     if (!Array.isArray(palette)) {
         palette = Array.from(Object.values(palette));
     }
