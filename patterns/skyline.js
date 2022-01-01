@@ -18,15 +18,22 @@ export default {
             const prng = gen.create(`${Math.floor(p.time / c.period) + i}`);
             heights[i] = (Math.pow(prng.random(), 3) + 0.2) * p.pixelHeight;
         }
+        const offsets = [];
+        for (let i = 0; i < p.pixelHeight; i++) {
+            const prng = gen.create(`${Math.floor(p.time / c.period) + i}`);
+            offsets[i] = (Math.pow(prng.random(), 3) + 0.2);
+        }
         return {
             heights,
+            offsets,
         };
     },
     pixel: (p, c, g) => {
         if (p.pos.y <= g.heights[p.pos.x / 3]) {
             return c.buildingColor;
         }
-        const pos = remap(p.pos.y, 0, p.height, 0, 1);
-        return grad([0.35, p.palette[2], 0.9, p.palette[1], 1, p.palette[0]], pos);
+        const offset = g.offsets[p.index % g.offsets.length] * 0.05;
+        const pos = remap(p.pos.y, 0, p.height, 0, 1) + offset;
+        return grad([0.25, p.palette[2], 0.65, p.palette[1], 1, p.palette[0]], pos);
     }
 };

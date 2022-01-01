@@ -26,16 +26,20 @@ export const light = {
 };
 
 export const pair = {
-    ...light,
     __default: "Psych",
     Psych: {
-        off: hex("#008080"),
-        on: hex("#ff0000"),
+        off: hex("#E1341E"),
+        on: hex("#1ECBE1"),
     },
     Love: {
-        off: hex("#AA11FF"),
-        on: hex("#FF3000"),
+        off: hex("#F90689"),
+        on: hex("#06F976"),
     },
+    Robe: {
+        off: hex("#8923DC"),
+        on: hex("#76DC23"),
+    },
+    ...light,
 };
 
 export const palette = {
@@ -78,9 +82,9 @@ export const palette = {
 export const sky = {
     __default: "Vintage Sunset",
     "Vintage Sunset": [
-        hex("#AA11FF"),
-        hex("#8877FF"),
-        hex("#FF1900"),
+        hex("#5dc3cf"),
+        hex("#fc9803"),
+        hex("#4c008f"),
     ],
     Morning: [
         hex("#EEAAFF"),
