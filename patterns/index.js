@@ -8,6 +8,10 @@ import stripes from "../patterns/stripes.js";
 import matrix from "../patterns/matrix.js";
 import noise from "../patterns/noise.js";
 import hueRotate from "../patterns/hueRotate.js";
+import gptGradient from "../patterns/gptGradient.js";
+import gptDonkey from "../patterns/gptDonkey.js";
+import gptSpin from "../patterns/gptSpin.js";
+import gptSine from "../patterns/gptSine.js";
 
 export default {
     "Matrix": matrix,
@@ -20,4 +24,8 @@ export default {
     "Gradient": gradient,
     "Solid": solid,
     "Hue Rotate": hueRotate,
+    "GPT Gradient": gptGradient,
+    "GPT Donkey": gptDonkey,
+    "GPT Spin": gptSpin,
+    "GPT Sine": gptSine,
 };
