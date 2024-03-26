@@ -1,4 +1,5 @@
-import SimplexNoise from "simplex-noise";
+import gen from "random-seed";
+import { createNoise2D } from 'simplex-noise';
 import { lerpRGB } from "../engine/color.js";
 
 export default {
@@ -7,12 +8,13 @@ export default {
         period: 5,
     },
     global: (p, c) => {
+        const prng = gen.create("seed");
         return {
-            s: new SimplexNoise('seed'),
+            s: createNoise2D(prng.random),
         };
     },
     pixel: (p, c, g) => {
-        const pos = g.s.noise2D(p.time / 10 + p.pos.y, p.pos.x);
+        const pos = g.s(p.time / 10 + p.pos.y, p.pos.x);
         return lerpRGB(p.palette.off, p.palette.on, Math.sqrt(pos));
     }
 };

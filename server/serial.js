@@ -1,4 +1,4 @@
-import SerialPort from 'serialport';
+import { SerialPort } from 'serialport';
 import { Buffer } from 'buffer';
 import { GammaLookUp } from '../engine/gamma.js';
 import { keyframes } from '../engine/math.js';
@@ -30,7 +30,7 @@ export class SerialView {
     constructor(executor) {
         this.executor = executor;
         this.port = undefined;
-        const port = new SerialPort("/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00", {
+        const port = new SerialPort({ path: "/dev/serial/by-id/usb-Teensyduino_USB_Serial_8157270-if00",
           baudRate: 115200
         }, () => {
             this.port = port;

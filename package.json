@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "parcel frontend/index.html",
-    "start": "concurrently \"parcel frontend/index.html\" \"nodemon --exec 'node server/index.js'\""
+    "dev": "vite",
+    "start": "concurrently \"vite\" \"nodemon --exec 'node server/index.js'\""
   },
   "repository": {
     "type": "git",
@@ -20,17 +20,18 @@
   "homepage": "https://github.com/willstott101/lightpanel#readme",
   "dependencies": {
     "random-seed": "^0.3.0",
-    "serialport": "^9.2.0",
+    "serialport": "^12.0.0",
     "simple-color-converter": "^2.1.13",
-    "simplex-noise": "^3.0.0",
+    "simplex-noise": "^4.0.1",
     "svelte-icons": "^2.1.0",
-    "ws": "8.3.0"
+    "ws": "^8.16.0"
   },
   "devDependencies": {
-    "concurrently": "^6.4.0",
-    "nodemon": "^2.0.15",
-    "parcel": "^2.0.0",
-    "parcel-transformer-svelte": "^1.1.2",
-    "svelte": "^3.44.0"
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0",
+    "sass": "^1.72.0",
+    "svelte": "^4.2.12",
+    "vite": "^5.2.6"
   }
 }
