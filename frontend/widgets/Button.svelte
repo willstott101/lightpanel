@@ -3,7 +3,7 @@
     export let iconSize = "large";
 </script>
 
-<style lang="scss">
+<style>
     .base {
         background-color: #d9d6d0;
         box-sizing: border-box;
