@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "start": "concurrently \"vite\" \"nodemon --exec 'node server/index.js'\""
+    "ui": "vite",
+    "server": "nodemon --exec 'node server/index.js'",
+    "start": "concurrently --restart-tries -1 npm:ui npm:server"
   },
   "repository": {
     "type": "git",

@@ -6,6 +6,9 @@ export default defineConfig({
     svelte()
   ],
   server: {
+    host: true,
+    port: 1234,
+    strictPort: true,
     proxy: {
         "/ws": {
             "target": "http://localhost:8080/",
