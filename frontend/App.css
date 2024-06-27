@@ -1,0 +1,13 @@
+.root {
+    background-color: #353535;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.grid {
+    display: inline-grid;
+    grid-template-columns: auto 6em 6em 6em;
+    grid-template-rows: 6em 6em 6em 6em;
+}
