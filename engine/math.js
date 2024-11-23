@@ -51,3 +51,7 @@ export function keyframes(stops, pos, lerpFn = lerp) {
     const p = remap(pos, 0, stopDist(), 0, 1);
     return lerpFn(stops[idx * 2 + 1], stops[idx * 2 + 3], p);
 }
+
+export function randomChoice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
