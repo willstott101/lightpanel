@@ -7,7 +7,7 @@ import dvd from "../patterns/dvd.js";
 import stripes from "../patterns/stripes.js";
 import matrix from "../patterns/matrix.js";
 import noise from "../patterns/noise.js";
-import squareNoise from "../patterns/squareNoise.js";
+import colorNoise from "../patterns/colorNoise.js";
 import hueRotate from "../patterns/hueRotate.js";
 import gptGradient from "../patterns/gptGradient.js";
 import gptDonkey from "../patterns/gptDonkey.js";
