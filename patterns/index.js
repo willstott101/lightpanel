@@ -21,7 +21,7 @@ export default {
     "Skyline": skyline,
     "DVD": dvd,
     "Noise": noise,
-    "Sq Noise": squareNoise,
+    "Color Noise": colorNoise,
     "Striped": stripes,
     "Gradient": gradient,
     "Solid": solid,
