@@ -27,7 +27,7 @@ export class Executor {
         this._running = false;
         this._listeners = new Set();
         this.remoteControlled = false;
-        this.patchName = "Noise";
+        this.patchName = "Solid";
     }
 
     addView(name, view) {

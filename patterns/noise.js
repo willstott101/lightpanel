@@ -15,6 +15,6 @@ export default {
     },
     pixel: (p, c, g) => {
         const pos = g.s(p.time / 10 + p.pos.y, p.pos.x);
-        return lerpRGB(p.palette.off, p.palette.on, Math.sqrt(pos) + 0.3);
+        return lerpRGB(p.palette.off, p.palette.on, Math.sqrt(pos) + 0.1);
     }
 };
