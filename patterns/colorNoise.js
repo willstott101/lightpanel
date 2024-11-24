@@ -31,9 +31,6 @@ export default {
         } else {
             g.colors[p.index] = undefined;
         }
-        if (p.index === 1) {
-            console.log("pos", pos, "col", g.colors[p.index]);
-        }
         if (g.colors[p.index])
             return color.lerpRGB({r: 0, g: 0, b: 0}, g.colors[p.index], Math.sqrt(pos));
         else
