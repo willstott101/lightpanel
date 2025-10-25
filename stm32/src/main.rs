@@ -24,13 +24,15 @@ use smart_leds::{colors};
 #[entry]
 fn main() -> ! {
     let dp = stm32::Peripherals::take().expect("cannot take peripherals");
+    let cp = cortex_m::Peripherals::take().expect("cannot take core peripherals");
     // Constrain clocking registers
     let mut rcc = dp.RCC.constrain();
     // let clocks = rcc.cfgr.sysclk(48_000.kHz()).freeze();
     
-    // let mut delay = Delay::new(cp.SYST, &clocks);
-    let timer2 = Timer::new(dp.TIM2, &rcc.clocks);
-    let mut delay_tim2 = DelayFromCountDownTimer::new(timer2.start_count_down(1u32.millis()));
+    // let mut delay = Delay::new(cp.SYST, &rcc.clocks);
+    let mut delay = cp.SYST.delay(&rcc.clocks);
+    // let timer2 = Timer::new(cp.TIM2, &rcc.clocks);
+    // let mut delay_tim2 = DelayFromCountDownTimer::new(timer2.start_count_down(1u32.millis()));
 
     // GPIOA used for SPI
     let gpioa = dp.GPIOA.split(&mut rcc);
@@ -44,7 +46,7 @@ fn main() -> ! {
     // PA7 is CN5 - 4 on the back of my nucleo board
     let mosi = gpioa.pa7.into_alternate();     // PA7 is output going to data line of leds
 
-    // SPI1 with 3Mhz
+    // SPI1 with 3Mhz (apparently between 2 and 3.8 makes sense, afaict 2.4 is "correct")
     let spi = dp
         .SPI1
         .spi((sclk, spi::NoMiso, mosi), spi::MODE_0, 2_400.kHz(), &mut rcc);
@@ -52,7 +54,10 @@ fn main() -> ! {
     let mut ws = Ws2812::new(spi);
 
     const LED_NUM: usize = 50;
-    let mut data: [RGB8; 50] = [colors::WHITE; LED_NUM];
+    let mut data: [RGB8; LED_NUM] = [colors::RED; LED_NUM];
+    // data[0] = colors::RED;
+    // data[1] = colors::RED;
+    // data[2] = colors::BLUE;
 
     // loop {
     //     spi.send(127 as u8).unwrap();
@@ -84,6 +89,7 @@ fn main() -> ! {
         // ws.write(gamma(data.iter().cloned())).unwrap();
         ws.write(data.iter().cloned()).unwrap();
         // delay.delay_ms(10u32);
-        delay_tim2.delay_ms(1_u16);
+        // delay_tim2.delay_ms(1_u16);
+        delay.delay_ms(1_u32);
     }
 }
